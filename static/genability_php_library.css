@@ -1,0 +1,263 @@
+/* yui 3 reset */
+html{color:#000;background:#FFF;}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0;}table{border-collapse:collapse;border-spacing:0;}fieldset,img{border:0;}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal;}li{list-style:none;}caption,th{text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}q:before,q:after{content:'';}abbr,acronym{border:0;font-variant:normal;}sup{vertical-align:text-top;}sub{vertical-align:text-bottom;}input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit;}input,textarea,select{*font-size:100%;}legend{color:#000;}
+/* yui 3 reset */
+
+strong {
+	font-weight: bold;
+}
+
+body {
+	font-family: "Trebuchet MS",Verdana,Arial,sans-serif;
+	color: #57666F;
+	overflow: visible;
+}
+
+a {
+    color: #0096D6;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a:hover, a:focus, .nav a:hover, .nav a:focus {
+    color: #6FC0F0;
+}
+
+h3.nav {
+	margin-bottom: 15px;
+}
+
+#genabilityExample {
+	width: 1000px;
+	margin: 15px auto 100px;
+	position: relative;
+}
+
+#powered_by_genability {
+	position: absolute;
+	right: 0;
+}
+
+#genability {
+	background: #fff url('../static/images/genability_logo.png') no-repeat 0 0;
+	width: 168px; height: 80px;
+	text-indent: -9999px;
+	margin-bottom: 15px;
+}
+
+#genability a {
+	display: block;
+	width: 168px; height: 80px;
+}
+
+h2 {
+	font-size: 35px;
+	margin-bottom: 15px;
+}
+
+label {
+	font-weight: bold;
+	font-variant: small-caps;
+	float: left;
+	clear: both;
+	width: 219px;
+	text-align: right;
+	margin-right: 25px;
+}
+
+#tariffForm input,
+#tariffInputs input[type="text"]  {
+	width: 250px;
+}
+
+button {
+	position: relative;
+	left: 300px;
+	margin-top: 15px;
+}
+
+.tariff_info {
+	border-top: 1px solid #C6CBCD;
+	margin-top: 50px;
+	padding-top: 50px;
+}
+
+.tariff_info p {
+	font-size: 20px;
+	margin-bottom: 8px;
+}
+
+.tariff_info label {
+	border-bottom: 1px solid #C6CBCD;
+	border-left: 3px solid #0096D6;
+}
+
+.tariff_rates {
+	clear: left;
+	width: 100%;
+	margin-top: 15px;
+
+}
+
+.tariff_rates th {
+	font-weight: bold;
+	text-align: center;
+	padding: 5px;
+	background-color: #0096D6;
+	color: #fff;
+}
+
+.tariff_rates td {
+	text-align: center;
+	padding: 5px;
+	border: 1px solid #C6CBCD;
+	font-size: .85em;
+}
+
+
+#json_resp {
+	display: none;
+}
+
+#tariff_list {
+	display: none;
+	background-color: #fff;
+	position: absolute;
+	border: 1px solid #0096D6;
+	padding: 10px;
+	z-index: 999;
+	zoom: 1;
+}
+
+#tariff_list:after {
+	content: '';
+	clear: both;
+	display: block;
+}
+
+#tariff_list .close {
+	position: absolute;
+	top: 3px; right: 5px;
+}
+
+#tariff_list .lse {
+	float: left;
+	width: 45%;
+}
+
+#tariff_list .lse.second {
+	margin-left: 25px;
+	border-left: 1px solid #C6CBCD;
+	padding-left: 25px;
+}
+
+#tariff_list .lse_name {
+	font-weight: bold;
+	color: #0096D6;
+	font-size: 1.1em;
+}
+
+#tariff_list .lse_zipcode {
+	font-size: 0.8em;
+	padding-bottom: 10px;
+	border-bottom: 1px solid #C6CBCD;
+}
+
+#tariff_list .lse_tariff {
+	margin-bottom: 3px;
+}
+
+.tariff_rates td.group_name {
+	font-weight: bold;
+	text-decoration: underline;
+	text-align:left;
+}
+
+.tariff_rates td.applicability {
+	font-weight: bold;
+}
+
+.tariff_rates td.rateName {
+	font-weight: bold;
+	text-align:left;
+	padding-left: 50px;
+}
+
+.tariff_rates td.chargePeriod {
+	font-weight: bold;
+}
+
+.pretty_blue_table {
+	clear: left;
+	width: 100%;
+	margin-top: 15px;
+
+}
+
+.pretty_blue_table th {
+	font-weight: bold;
+	text-align: center;
+	padding: 5px;
+	background-color: #0096D6;
+	color: #fff;
+}
+
+.pretty_blue_table td {
+	text-align: center;
+	padding: 5px;
+	border: 1px solid #C6CBCD;
+}
+
+.pretty_blue_table th.rpi {
+	cursor: help;
+}
+
+.pretty_blue_table td.change_name {
+	text-align: left;
+	padding-left: 10px;
+}
+
+#showInputs,
+#easyInput,
+#easyHourInputs {
+	margin: 20px 0;
+}
+
+#easyInput,
+#easyHourInputs {
+	display: none;
+	zoom: 1;
+}
+
+.hourCol {
+	width: 50%;
+	float: left;
+}
+
+.hourCol.right {
+	padding-top: 20px;
+}
+
+.hourCol.right label {
+	width: 100px;
+}
+
+#easyHourInputs:after {
+	clear: both;
+	content: '';
+	display: block;
+}
+
+.letsCalculate {
+	margin-bottom: 10px;
+}
+
+#generatedInputs {
+	margin-top: 25px;
+}
+
+.error {
+	margin: 20px 0;
+}
