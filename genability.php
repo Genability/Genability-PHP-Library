@@ -21,7 +21,7 @@ class genability {
 	/** @var String $GENABILITY_API_URL The base url for the Genability API */
 	private $GENABILITY_API_URL = "http://api.genability.com/rest/public/";
 	/** @var String $GENABILITY_API_URL_ALTRA The base url for the alpha Genability API */
-	private $GENABILITY_API_URL_ALPHA = "http://test.genability.com/rest/alpha/";
+	private $GENABILITY_API_URL_ALPHA = "http://api.genability.com/rest/alpha/";
 
 
 	// you can retrieve your APP_ID and APP_KEY from <https://developer.genability.com/admin/applications>
