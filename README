@@ -1,0 +1,16 @@
+README
+
+OVERVIEW
+The Genability PHP Library is an out of the box solution to use our API with PHP. A Blog post about the library can be found here: http://blog.genability.com/2011/08/genability-api-php-library-and-examples/. Included are 3 examples for the tariff, price and calculate calls. API Documentation can be found here: https://developer.genability.com/documentation. jquery and jqueryui are included to handle javascript for a better user experience.
+
+
+SETUP AND USAGE
+1. Copy the contents of Genability-PHP-Library to your php servers root folder
+2. Edit each example file (examples/tariff.php, examples/price.php, examples/calculate.php) and replace 'your-app-id-here' and 'your-app-key-here' with your unique id and key which can be made here: https://developer.genability.com/admin/applications.
+3. Navigate to any of the example php files (they all link to each other)
+4. For tariff.php and price.php, the form is pre-filled with default data
+5. Toggle "view/hide response" to see the actual response from the server
+
+
+SUPPORT
+If you have any questions or run into any issues with this, please let us know at support@genability.com
