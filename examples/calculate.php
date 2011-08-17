@@ -26,6 +26,12 @@ if ($_POST['toDateTime']) {
 	$TO_DATE_TIME = $toDateTime;
 }
 
+if ($_POST['quantity_key']) {
+	$QUANTITY_KEY = $_POST['quantity_key'];
+} else {
+	$QUANTITY_KEY = 'consumption';
+}
+
 
 /** include the Genability PHP Library */
 require_once('../genability.php');
@@ -90,18 +96,18 @@ function formatText($input) {
 		</div>
 		<div class="inputBlock">
 			<label for="quantity_key">Consumption or Demand</label>
-			<select class="quantity_key">
-				<option value="consumption">consumption (kwh)</option>
-				<option value="demand">demand (kw)</option>
+			<select name="quantity_key" class="quantity_key">
+				<option value="consumption"<?if($QUANTITY_KEY == 'consumption'){echo ' selected';}?>>consumption (kwh)</option>
+				<option value="demand"<?if($QUANTITY_KEY == 'demand'){echo ' selected';}?>>demand (kw)</option>
 			</select>
 		</div>
 		<div class="inputBlock">
 			<label for="fromDateTime">From Date</label>
-			<input type="text" name="fromDateTime" value="<?=$fromDateTime?>"/>
+			<input type="text" name="fromDateTime" value="<?=$FROM_DATE_TIME?>"/>
 		</div>
 		<div class="inputBlock">
 			<label for="toDateTime">To Date</label>
-			<input type="text" name="toDateTime" value="<?=$toDateTime?>"/>
+			<input type="text" name="toDateTime" value="<?=$TO_DATE_TIME?>"/>
 		</div>
 		<div class="inputBlock">
 			<label for="territoryId">Territory Id</label>
