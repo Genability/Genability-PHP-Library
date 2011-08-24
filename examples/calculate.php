@@ -1,6 +1,18 @@
 <?
 // set the default timezone for php date methods <http://www.php.net/manual/en/function.date-default-timezone-set.php>
-date_default_timezone_set('America/Los_Angeles');
+switch ($_POST['timezone']) {
+	case "-0400":
+		date_default_timezone_set('America/New_York');
+		break;
+	case "-0500":
+		date_default_timezone_set('America/Chicago');
+		break;
+	case "-0600":
+		date_default_timezone_set('America/Boise');
+		break;
+	default:
+		date_default_timezone_set('America/Los_Angeles');
+}
 
 // default fromDateTime and toDateTime set to the first of this month and next month
 $fromDateTime = '2011-'.date('m').'-01T00:00:00.0-0700';
@@ -11,7 +23,7 @@ $toDateTime = '2011-'.date('m', mktime(0, 0, 0, date("m")+1, date("d"), date("Y"
 if ($_POST['tariff']) {
 	$TARIFF_ID = $_POST['tariff'];
 } else {
-	$TARIFF_ID = '512';
+	$TARIFF_ID = '82010';
 }
 
 if ($_POST['fromDateTime']) {
@@ -25,13 +37,6 @@ if ($_POST['toDateTime']) {
 } else {
 	$TO_DATE_TIME = $toDateTime;
 }
-
-if ($_POST['quantity_key']) {
-	$QUANTITY_KEY = $_POST['quantity_key'];
-} else {
-	$QUANTITY_KEY = 'consumption';
-}
-
 
 /** include the Genability PHP Library */
 require_once('../genability.php');
@@ -90,15 +95,18 @@ function formatText($input) {
 	<h3 class="nav">Genability API PHP Library :: Examples :: <a href="tariff.php">Tariff</a> | <a href="price.php">Price</a> | <a href="calculate.php">Calculate</a></h3>
 	<h2>Calculate Example</h2>
 	<form id="tariffInputs" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
+<?if (!$_POST['tariff']) {?>
 		<div class="inputBlock">
 			<label for="tariff">Master Tariff Id</label>
 			<input type="text" name="tariff" value="<?=$TARIFF_ID?>"/>
 		</div>
 		<div class="inputBlock">
-			<label for="quantity_key">Consumption or Demand</label>
-			<select name="quantity_key" class="quantity_key">
-				<option value="consumption"<?if($QUANTITY_KEY == 'consumption'){echo ' selected';}?>>consumption (kwh)</option>
-				<option value="demand"<?if($QUANTITY_KEY == 'demand'){echo ' selected';}?>>demand (kw)</option>
+			<label for="timezone">Timezone</label>
+			<select name="timezone">
+				<option value="-0700">Pacific</option>
+				<option value="-0600">Mountain</option>
+				<option value="-0500">Central</option>
+				<option value="-0400">Eastern</option>
 			</select>
 		</div>
 		<div class="inputBlock">
@@ -113,10 +121,49 @@ function formatText($input) {
 			<label for="territoryId">Territory Id</label>
 			<input type="text" name="territoryId" value="<?=$_POST['territoryId']?>"/>
 		</div>
+		<label for="hiddenInputBecauseImLazy">&nbsp;</label>
+		<input type="submit" value="Proceed"/>
 
+<?} else {?>
+<input type="hidden" name="tariff" value="<?=$TARIFF_ID?>"/>
+<input type="hidden" name="timezone" value="<?=$_POST['timezone']?>"/>
+<input type="hidden" name="fromDateTime" value="<?=$FROM_DATE_TIME?>"/>
+<input type="hidden" name="toDateTime" value="<?=$TO_DATE_TIME?>"/>
+<input type="hidden" name="territoryId" value="<?=$_POST['territoryId']?>"/>
+
+<div class="inputBlock">
+	<label>Master Tariff Id</label> <?=$TARIFF_ID?>
+</div>
+
+<? if($_POST['territoryId']) {?>
+<div class="inputBlock">
+	<label>Territory Id</label> <?=$_POST['territoryId']?>
+</div>
+<? } ?>
+
+<div class="inputBlock">
+	<label>Timespan</label> from <?=$FROM_DATE_TIME?> to <?=$TO_DATE_TIME?>
+</div>
+<div class="inputBlock">
+	<label>Timezone</label> <? switch($_POST['timezone']) {
+	case "-0400":
+		echo "Eastern";
+		break;
+	case "-0500":
+		echo "Central";
+		break;
+	case "-0600":
+		echo "Mountain";
+		break;
+	default:
+		echo "Pacific";
+}?>
+</div>
+
+<? if ($c["type"] != "CalculatedCost") {?>
 <div id="showInputs">
 	<label>Show Inputs</label>
-	<input type="button" id="metadata" value="Get Metadata"/>
+	<input type="button" id="metadata" value="Metadata/TOU Buckets"/>
 	<input type="button" id="one" value="One Input"/>
 	<input type="button" id="months" value="Months"/>
 	<input type="button" id="days" value="Days"/>
@@ -210,10 +257,14 @@ function formatText($input) {
 
 <label for="hiddenInputBecauseImLazy">&nbsp;</label>
 <input type="submit" value="Calculate!" class="letsCalculate"/>
+<? } ?>
+
+<label for="hiddenInputBecauseImLazy">&nbsp;</label>
+<input type="button" value="Return to Step 1" id="step1"/>
 
 <hr/>
 
-<div id="generatedInputs"></div>
+<a id="toggleResponse" href="#">view/hide response</a><div id="json_resp"><?=var_dump(json_decode($output, true));?></div>
 
 <?if ($c["status"] == "success" && $c["type"] == "TariffInput") { ?>
 <table id="metadataInputs" class="pretty_blue_table">
@@ -223,7 +274,6 @@ function formatText($input) {
 		<th>toDateTime</th>
 		<th>value</th>
 		<th>unit</th>
-		<th>accuracy</th>
 	</tr>
 <?
 	//foreach ($c["results"] as $r) {
@@ -235,15 +285,44 @@ function formatText($input) {
 		<td><?=date("n/j/y g:i a", strtotime($c["results"][$i]["toDateTime"]))?><input type="hidden" name="tariffInputs[<?=$i?>][toDateTime]" value="<?=$c[results][$i][toDateTime]?>"/></td>
 		<td><input type="text" name="tariffInputs[<?=$i?>][value]" class="tariffValue"/></td>
 		<td><?=$c["results"][$i]["unit"]?><input type="hidden" name="tariffInputs[<?=$i?>][unit]" value="<?=$c[results][$i][unit]?>"/></td>
-		<td><?=$c["results"][$i]["accuracy"]?></td>
 	</tr>
 <?	}
 ?>
 </table>
 <? } ?>
-</form>
 
-<a id="toggleResponse" href="#">view/hide response</a><div id="json_resp"><?=var_dump(json_decode($output, true));?></div>
+<?if ($c["status"] == "success" && $c["type"] == "TariffInput") {
+$nonConsumption = false;
+$j=0;
+	//foreach ($c["results"] as $r) {
+	for ($i = 0; $i < sizeof($c["results"]) ; $i++) {
+		if ($c[results][$i][key] != "consumption") {
+			if ($nonConsumption == false) { ?>
+<table id="metadataInputs2" class="pretty_blue_table">
+	<tr>
+		<th>key</th>
+		<th>fromDateTime</th>
+		<th>toDateTime</th>
+		<th>value</th>
+		<th>unit</th>
+	</tr>
+<? } $nonConsumption = true; ?>
+	
+	<tr>
+		<td><?=$c["results"][$i]["key"]?><input type="hidden" name="tariffInputs[<?=$j?>][key]" value="<?=$c[results][$i][key]?>"/></td>
+		<td><?=date("n/j/y g:i a", strtotime($c["results"][$i]["fromDateTime"]))?><input type="hidden" name="tariffInputs[<?=$j?>][fromDateTime]" value="<?=$c[results][$i][fromDateTime]?>"/></td>
+		<td><?=date("n/j/y g:i a", strtotime($c["results"][$i]["toDateTime"]))?><input type="hidden" name="tariffInputs[<?=$j?>][toDateTime]" value="<?=$c[results][$i][toDateTime]?>"/></td>
+		<td><input type="text" name="tariffInputs[<?=$j?>][value]" class="tariffValue"/></td>
+		<td><?=$c["results"][$i]["unit"]?><input type="hidden" name="tariffInputs[<?=$j?>][unit]" value="<?=$c[results][$i][unit]?>"/></td>
+	</tr>
+<?	$j++;	}
+	}
+if ($nonConsumption == true) { echo '<input type="hidden" id="currj" value="'.$j.'"/></table>'; }
+} ?>
+
+<div id="generatedInputs"></div>
+<? } ?>
+</form>
 
 <? if ($c["status"] == "success" && $c["type"] == "CalculatedCost") {
 	for ($i=0; $i<sizeof($c["results"]); $i++) { ?>
@@ -265,7 +344,6 @@ function formatText($input) {
 				<th>Rate Type</th>
 				<th>Quantity Key</th>
 				<th>Quantity</th>
-				<th>Count</th>
 				<th>Cost</th>
 			</t>
 		</thead>
@@ -280,7 +358,6 @@ function formatText($input) {
 				<td><?=formatText($ci["rateType"])?></td>
 				<td><?=$ci["quantityKey"]?></td>
 				<td><?=$ci["itemQuantity"]?></td>
-				<td><?=$ci["itemCount"]?></td>
 				<td><?=$ci["cost"]?></td>
 			</tr>
 		<?}?></tbody>

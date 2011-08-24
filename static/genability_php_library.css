@@ -261,3 +261,7 @@ button {
 .error {
 	margin: 20px 0;
 }
+
+#metadataInputs2 {
+	display: none;
+}

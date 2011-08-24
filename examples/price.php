@@ -50,7 +50,7 @@ require_once('../genability.php');
 $gen = new genability(array(
   'app_id'  => 'your-app-id-here',    // Your Unique Genability Application ID <https://developer.genability.com/admin/applications>
   'app_key' => 'your-app-key-here',   // Your Unique Genability Application Key <https://developer.genability.com/admin/applications>
-  //'debug'   => true,                // Debug mode echos API Url if set to true (Optional)
+  //'debug'   => true,                // Debug mode echos API Url & POST data if set to true (Optional)
 ));
 
 // make the getPrice call
