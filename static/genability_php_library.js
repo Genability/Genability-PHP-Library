@@ -112,6 +112,7 @@ $(function (){
 });
 
 function generateTariffInputs(startDate, endDate, breakdown) {
+	console.log(selectedTimezone);
 	// if currJ exists, get it and then add j to offset
 	if ($("#currj").is('*')) {
 		tariffInputsArrayOffset = $("#currj").val();
