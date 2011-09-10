@@ -179,6 +179,7 @@ class genability {
 		if ($params['territoryId']) {
 			$data['territoryId'] = $params['territoryId'];
 		}
+		$data['detailLevel'] = $params['detailLevel'];
 		$data['tariffInputs'] = $params['tariffInputs'];
 		$data = json_encode($data);
 
@@ -192,6 +193,30 @@ class genability {
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $arr);
 		curl_setopt($ch, CURLOPT_POST, true);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+		$result = curl_exec($ch);
+		$info = curl_getinfo($ch);
+		curl_close($ch);
+		
+		return $result;
+	}
+
+	/**
+	 * getPropertyKey
+	 *
+	 * Get One Property
+	 * This allows you to retrieve one Property using its keyname. This is particularly useful when using the
+	 * Calculator as it may require you to specify certain applicability values prior to making the calculation.
+	 * <https://developer.genability.com/documentation/api-reference/public/property>
+	 */
+	function getPropertyKey($params) {
+		$url = $this->GENABILITY_API_URL . "properties/" . $params['keyName'] . $this->API_PARAMS;
+
+		if ($this->config['debug']) { echo $url; }
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
 		$result = curl_exec($ch);
 		$info = curl_getinfo($ch);
 		curl_close($ch);

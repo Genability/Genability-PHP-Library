@@ -56,6 +56,7 @@ if ($_POST['tariffInputs']) {
 	  'fromDateTime'  => $FROM_DATE_TIME,          // Starting date and time for this Calculate request. (Required)
 	  'toDateTime'    => $TO_DATE_TIME,            // End date and time for this Calculate request. (Required)
 	  'territoryId'   => $_POST['territoryId'],    // The territory ID of where the usage consumption occurred. (Optional)
+	  'detailLevel'   => $_POST['detailLevel'],    // (Optional)
 	  'tariffInputs'  => $_POST['tariffInputs'],   // The input values to use when running the calculation. (Array)
 	  
 	));
@@ -130,6 +131,7 @@ function formatText($input) {
 <input type="hidden" name="fromDateTime" value="<?=$FROM_DATE_TIME?>"/>
 <input type="hidden" name="toDateTime" value="<?=$TO_DATE_TIME?>"/>
 <input type="hidden" name="territoryId" value="<?=$_POST['territoryId']?>"/>
+<input type="hidden" name="tariffInputs" value="<?=$_POST['tariffInputs']?>"/>
 
 <div class="inputBlock">
 	<label>Master Tariff Id</label> <?=$TARIFF_ID?>
@@ -159,12 +161,24 @@ function formatText($input) {
 		echo "Pacific";
 }?>
 </div>
+<div class="inputBlock">
+	<label>Detail Level</label>
+<? if ($_POST['detailLevel']) {
+	echo ucwords(strtolower(str_replace("_", " ", $_POST['detailLevel'])));
+} else { ?>
+	<select name="detailLevel">
+		<option value="ALL" <?if ($_POST['detailLevel'] == 'ALL') echo 'selected';?>>All</option>
+		<option value="TOTAL" <?if ($_POST['detailLevel'] == 'TOTAL') echo 'selected';?>>Total</option>
+		<option value="RATE" <?if ($_POST['detailLevel'] == 'RATE') echo 'selected';?>>Rate</option>
+	</select>
+<? } ?>
+</div>
 
 <? if ($c["type"] != "CalculatedCost") {?>
 <div id="showInputs">
 	<label>Show Inputs</label>
 	<input type="button" id="metadata" value="Metadata/TOU Buckets"/>
-	<input type="button" id="one" value="One Input"/>
+	<input type="button" id="one" value="One Timespan"/>
 	<input type="button" id="months" value="Months"/>
 	<input type="button" id="days" value="Days"/>
 	<input type="button" id="hours" value="Hours"/>
@@ -257,6 +271,7 @@ function formatText($input) {
 
 <label for="hiddenInputBecauseImLazy">&nbsp;</label>
 <input type="submit" value="Calculate!" class="letsCalculate"/>
+
 <? } ?>
 
 <label for="hiddenInputBecauseImLazy">&nbsp;</label>
@@ -283,7 +298,20 @@ function formatText($input) {
 		<td><?=$c["results"][$i]["key"]?><input type="hidden" name="tariffInputs[<?=$i?>][key]" value="<?=$c[results][$i][key]?>"/></td>
 		<td><?=date("n/j/y g:i a", strtotime($c["results"][$i]["fromDateTime"]))?><input type="hidden" name="tariffInputs[<?=$i?>][fromDateTime]" value="<?=$c[results][$i][fromDateTime]?>"/></td>
 		<td><?=date("n/j/y g:i a", strtotime($c["results"][$i]["toDateTime"]))?><input type="hidden" name="tariffInputs[<?=$i?>][toDateTime]" value="<?=$c[results][$i][toDateTime]?>"/></td>
-		<td><input type="text" name="tariffInputs[<?=$i?>][value]" class="tariffValue"/></td>
+		<td><? if ($c["results"][$i]["key"] != 'consumption' && $c["results"][$i]["key"] != 'demand') {
+			$gpk = $gen->getPropertyKey(array('keyName'=> $c["results"][$i]["key"])); $gpk= json_decode($gpk, true);
+			if ($gpk["results"][0]["dataType"] == "CHOICE" || $gpk["results"][0]["dataType"] == "BOOLEAN") { ?>
+			<select name="tariffInputs[<?=$i?>][value]">
+				<? for ($j = 0; $j < sizeof($gpk["results"][0]["choices"]); $j++) { ?>
+				<option value="<?=$gpk["results"][0]["choices"][$j]["value"]?>"><?=$gpk["results"][0]["choices"][$j]["displayValue"]?></option>
+				<? } ?>
+			</select>
+			<? } else { ?>
+			<input type="text" name="tariffInputs[<?=$i?>][value]" class="tariffValue" placeholder="Enter <?=ucwords(strtolower($gpk["results"][0]["dataType"]))?>"/>
+			<? } ?>
+		<? } else { ?>
+		<input type="text" name="tariffInputs[<?=$i?>][value]" class="tariffValue"/>
+		<? }?></td>
 		<td><?=$c["results"][$i]["unit"]?><input type="hidden" name="tariffInputs[<?=$i?>][unit]" value="<?=$c[results][$i][unit]?>"/></td>
 	</tr>
 <?	}
@@ -312,7 +340,20 @@ $j=0;
 		<td><?=$c["results"][$i]["key"]?><input type="hidden" name="tariffInputs[<?=$j?>][key]" value="<?=$c[results][$i][key]?>"/></td>
 		<td><?=date("n/j/y g:i a", strtotime($c["results"][$i]["fromDateTime"]))?><input type="hidden" name="tariffInputs[<?=$j?>][fromDateTime]" value="<?=$c[results][$i][fromDateTime]?>"/></td>
 		<td><?=date("n/j/y g:i a", strtotime($c["results"][$i]["toDateTime"]))?><input type="hidden" name="tariffInputs[<?=$j?>][toDateTime]" value="<?=$c[results][$i][toDateTime]?>"/></td>
-		<td><input type="text" name="tariffInputs[<?=$j?>][value]" class="tariffValue"/></td>
+		<td><? if ($c["results"][$i]["key"] != 'consumption' && $c["results"][$i]["key"] != 'demand') {
+			$gpk = $gen->getPropertyKey(array('keyName'=> $c["results"][$i]["key"])); $gpk= json_decode($gpk, true);
+			if ($gpk["results"][0]["dataType"] == "CHOICE" || $gpk["results"][0]["dataType"] == "BOOLEAN") { ?>
+			<select name="tariffInputs[<?=$i?>][value]" class="tariffValue">
+				<? for ($j = 0; $j < sizeof($gpk["results"][0]["choices"]); $j++) { ?>
+				<option value="<?=$gpk["results"][0]["choices"][$j]["value"]?>"><?=$gpk["results"][0]["choices"][$j]["displayValue"]?></option>
+				<? } ?>
+			</select>
+			<? } else { ?>
+			<input type="text" name="tariffInputs[<?=$i?>][value]" class="tariffValue" placeholder="Enter <?=ucwords(strtolower($gpk["results"][0]["dataType"]))?>"/>
+			<? } ?>
+		<? } else { ?>
+		<input type="text" name="tariffInputs[<?=$i?>][value]" class="tariffValue"/>
+		<? }?></td>
 		<td><?=$c["results"][$i]["unit"]?><input type="hidden" name="tariffInputs[<?=$j?>][unit]" value="<?=$c[results][$i][unit]?>"/></td>
 	</tr>
 <?	$j++;	}
@@ -332,6 +373,7 @@ if ($nonConsumption == true) { echo '<input type="hidden" id="currj" value="'.$j
 		<p><label>Timespan</label>From <?=date("D M j, Y g:i a", strtotime($c["results"][$i]["fromDateTime"]))?> to <?=date("D M j, Y g:i a", strtotime($c["results"][$i]["toDateTime"]))?></p>
 		<p><label>Total Cost</label><strong><?=$c["results"][$i]["totalCost"]?></strong></p>
 	</ul>
+	<? if ($c["results"][$i]["items"] != NULL) { ?>
 	<table class="cost_breakdown pretty_blue_table">
 		<thead>
 			<tr>
@@ -362,7 +404,7 @@ if ($nonConsumption == true) { echo '<input type="hidden" id="currj" value="'.$j
 			</tr>
 		<?}?></tbody>
 	</table>
-	<? }
+	<? } }
 } else if ($c["type"] == "Error" && $c["results"][0]["objectName"] == "request") { ?>
 	<p class="error">Please enter a valid app id and app key, you can grab a pair here: <a href="https://developer.genability.com/admin/applications">https://developer.genability.com/admin/applications</a>
 <? } else if ($c["type"] == "Error") {
