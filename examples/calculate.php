@@ -44,8 +44,8 @@ require_once('../genability.php');
 // set your app id and app key
 $gen = new genability(array(
   'app_id'  => 'your-app-id-here',    // Your Unique Genability Application ID <https://developer.genability.com/admin/applications>
-  'app_key' => 'your-app-key-here',   // Your Unique Genability Application Key <https://developer.genability.com/admin/applications>
-  //'debug'   => true,                // Debug mode echos API Url & POST data if set to true (Optional)
+  'app_key' => 'your-app-key-here',  // Your Unique Genability Application Key <https://developer.genability.com/admin/applications>
+  'debug'   => true,                // Debug mode echos API Url & POST data if set to true (Optional)
 ));
 
 // if tariffInputs are sent through POST, make the calculate call
@@ -169,6 +169,7 @@ function formatText($input) {
 	<select name="detailLevel">
 		<option value="ALL" <?if ($_POST['detailLevel'] == 'ALL') echo 'selected';?>>All</option>
 		<option value="TOTAL" <?if ($_POST['detailLevel'] == 'TOTAL') echo 'selected';?>>Total</option>
+		<option value="CHARGE_TYPE" <?if ($_POST['detailLevel'] == 'CHARGE_TYPE') echo 'selected';?>>Charge Type</option>
 		<option value="RATE" <?if ($_POST['detailLevel'] == 'RATE') echo 'selected';?>>Rate</option>
 	</select>
 <? } ?>
@@ -178,13 +179,12 @@ function formatText($input) {
 <div id="showInputs">
 	<label>Show Inputs</label>
 	<input type="button" id="metadata" value="Metadata/TOU Buckets"/>
-	<input type="button" id="one" value="One Timespan"/>
 	<input type="button" id="months" value="Months"/>
 	<input type="button" id="days" value="Days"/>
 	<input type="button" id="hours" value="Hours"/>
 </div>
 
-<div id="easyInput"<?if ($c["status"] == "success" && $c["type"] == "TariffInput") { ?>style="display: block;"<? } ?>>
+<div id="easyInput"<?if ($c["status"] == "success" && $c["type"] == "PropertyData") { ?>style="display: block;"<? } ?>>
 	<label for="fillTheRest">Easy Input</label>
 	<input type="text" name="fillTheRest"/> <a href="#fillAll">fill all values</a>
 </div>
@@ -281,7 +281,7 @@ function formatText($input) {
 
 <a id="toggleResponse" href="#">view/hide response</a><div id="json_resp"><?=var_dump(json_decode($output, true));?></div>
 
-<?if ($c["status"] == "success" && $c["type"] == "TariffInput") { ?>
+<?if ($c["status"] == "success" && $c["type"] == "PropertyData") { ?>
 <table id="metadataInputs" class="pretty_blue_table">
 	<tr>
 		<th>key</th>
@@ -319,7 +319,7 @@ function formatText($input) {
 </table>
 <? } ?>
 
-<?if ($c["status"] == "success" && $c["type"] == "TariffInput") {
+<?if ($c["status"] == "success" && $c["type"] == "PropertyData") {
 $nonConsumption = false;
 $j=0;
 	//foreach ($c["results"] as $r) {

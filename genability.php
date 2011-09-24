@@ -6,7 +6,7 @@
  * or follow us on Twitter @genabilityapi
  *
  * @author Matthew Fong <mfong@genability.com> @matthewfong
- * @version 0.5
+ * @version 0.75
  *
  * Last Updated: August 11, 2011
  */
@@ -21,7 +21,7 @@ class genability {
 	/** @var String $GENABILITY_API_URL The base url for the Genability API */
 	private $GENABILITY_API_URL = "http://api.genability.com/rest/public/";
 	/** @var String $GENABILITY_API_URL_ALTRA The base url for the alpha Genability API */
-	private $GENABILITY_API_URL_ALPHA = "http://api.genability.com/rest/alpha/";
+	private $GENABILITY_API_URL_BETA = "http://api.genability.com/rest/beta/";
 
 
 	// you can retrieve your APP_ID and APP_KEY from <https://developer.genability.com/admin/applications>
@@ -136,7 +136,7 @@ class genability {
 	 * <https://developer.genability.com/documentation/api-reference/pricing/calculate>
 	 */
 	function getCalculateInputs($params) {
-		$url = $this->GENABILITY_API_URL_ALPHA . "calculate/" . $params['masterTariffId'] . $this->API_PARAMS
+		$url = $this->GENABILITY_API_URL_BETA . "calculate/" . $params['masterTariffId'] . $this->API_PARAMS
 			. "&fromDateTime=" . rawurlencode($params['fromDateTime'])
 			. "&toDateTime=" . rawurlencode($params['toDateTime']);
 
@@ -168,7 +168,7 @@ class genability {
 	 * <https://developer.genability.com/documentation/api-reference/pricing/calculate>
 	 */
 	function getCalculation($params) {
-		$url = $this->GENABILITY_API_URL_ALPHA . "calculate/" . $params['masterTariffId'];
+		$url = $this->GENABILITY_API_URL_BETA . "calculate/" . $params['masterTariffId'];
 
 		if ($this->config['debug']) { echo $url; }
 
