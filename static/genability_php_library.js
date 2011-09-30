@@ -261,8 +261,8 @@ function appendTariffInput(i, fromDateTime, toDateTime, label) {
 	$("<input/>").attr("name", "tariffInputs[" + i + "][key]").attr("type", "hidden").attr("value", "consumption").appendTo("#generatedInputs");
 	$("<input/>").attr("name", "tariffInputs[" + i + "][fromDateTime]").attr("type", "hidden").attr("value", fromDateTime).appendTo("#generatedInputs");
 	$("<input/>").attr("name", "tariffInputs[" + i + "][toDateTime]").attr("type", "hidden").attr("value", toDateTime).appendTo("#generatedInputs");
-	$("<label/>").attr("for", "tariffInputs[" + i + "][value]").html(label).appendTo("#generatedInputs");
-	$("<input/>").attr("name", "tariffInputs[" + i + "][value]").attr("type", "text").attr("class", "tariffValue").appendTo("#generatedInputs");
+	$("<label/>").attr("for", "tariffInputs[" + i + "][dataValue]").html(label).appendTo("#generatedInputs");
+	$("<input/>").attr("name", "tariffInputs[" + i + "][dataValue]").attr("type", "text").attr("class", "tariffValue").appendTo("#generatedInputs");
 	$("<input/>").attr("name", "tariffInputs[" + i + "][unit]").attr("type", "hidden").attr("value", "kwh").appendTo("#generatedInputs");
 	$("<br/>").appendTo("#generatedInputs");
 }

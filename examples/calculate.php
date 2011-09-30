@@ -44,7 +44,7 @@ require_once('../genability.php');
 // set your app id and app key
 $gen = new genability(array(
   'app_id'  => 'your-app-id-here',    // Your Unique Genability Application ID <https://developer.genability.com/admin/applications>
-  'app_key' => 'your-app-key-here',  // Your Unique Genability Application Key <https://developer.genability.com/admin/applications>
+  'app_key' => 'your-app-key-here',   // Your Unique Genability Application Key <https://developer.genability.com/admin/applications>
   'debug'   => true,                // Debug mode echos API Url & POST data if set to true (Optional)
 ));
 
@@ -295,22 +295,22 @@ function formatText($input) {
 	for ($i = 0; $i < sizeof($c["results"]) ; $i++) { ?>
 	
 	<tr>
-		<td><?=$c["results"][$i]["key"]?><input type="hidden" name="tariffInputs[<?=$i?>][key]" value="<?=$c[results][$i][key]?>"/></td>
+		<td><?=$c["results"][$i]["keyName"]?><input type="hidden" name="tariffInputs[<?=$i?>][keyName]" value="<?=$c[results][$i][keyName]?>"/></td>
 		<td><?=date("n/j/y g:i a", strtotime($c["results"][$i]["fromDateTime"]))?><input type="hidden" name="tariffInputs[<?=$i?>][fromDateTime]" value="<?=$c[results][$i][fromDateTime]?>"/></td>
 		<td><?=date("n/j/y g:i a", strtotime($c["results"][$i]["toDateTime"]))?><input type="hidden" name="tariffInputs[<?=$i?>][toDateTime]" value="<?=$c[results][$i][toDateTime]?>"/></td>
-		<td><? if ($c["results"][$i]["key"] != 'consumption' && $c["results"][$i]["key"] != 'demand') {
-			$gpk = $gen->getPropertyKey(array('keyName'=> $c["results"][$i]["key"])); $gpk= json_decode($gpk, true);
+		<td><? if ($c["results"][$i]["keyName"] != 'consumption' && $c["results"][$i]["keyName"] != 'demand') {
+			$gpk = $gen->getPropertyKey(array('keyName'=> $c["results"][$i]["keyName"])); $gpk= json_decode($gpk, true);
 			if ($gpk["results"][0]["dataType"] == "CHOICE" || $gpk["results"][0]["dataType"] == "BOOLEAN") { ?>
-			<select name="tariffInputs[<?=$i?>][value]">
+			<select name="tariffInputs[<?=$i?>][dataValue]">
 				<? for ($j = 0; $j < sizeof($gpk["results"][0]["choices"]); $j++) { ?>
 				<option value="<?=$gpk["results"][0]["choices"][$j]["value"]?>"><?=$gpk["results"][0]["choices"][$j]["displayValue"]?></option>
 				<? } ?>
 			</select>
 			<? } else { ?>
-			<input type="text" name="tariffInputs[<?=$i?>][value]" class="tariffValue" placeholder="Enter <?=ucwords(strtolower($gpk["results"][0]["dataType"]))?>"/>
+			<input type="text" name="tariffInputs[<?=$i?>][dataValue]" class="tariffValue" placeholder="Enter <?=ucwords(strtolower($gpk["results"][0]["dataType"]))?>"/>
 			<? } ?>
 		<? } else { ?>
-		<input type="text" name="tariffInputs[<?=$i?>][value]" class="tariffValue"/>
+		<input type="text" name="tariffInputs[<?=$i?>][dataValue]" class="tariffValue"/>
 		<? }?></td>
 		<td><?=$c["results"][$i]["unit"]?><input type="hidden" name="tariffInputs[<?=$i?>][unit]" value="<?=$c[results][$i][unit]?>"/></td>
 	</tr>
@@ -337,22 +337,22 @@ $j=0;
 <? } $nonConsumption = true; ?>
 	
 	<tr>
-		<td><?=$c["results"][$i]["key"]?><input type="hidden" name="tariffInputs[<?=$j?>][key]" value="<?=$c[results][$i][key]?>"/></td>
+		<td><?=$c["results"][$i]["keyName"]?><input type="hidden" name="tariffInputs[<?=$j?>][keyName]" value="<?=$c[results][$i][keyName]?>"/></td>
 		<td><?=date("n/j/y g:i a", strtotime($c["results"][$i]["fromDateTime"]))?><input type="hidden" name="tariffInputs[<?=$j?>][fromDateTime]" value="<?=$c[results][$i][fromDateTime]?>"/></td>
 		<td><?=date("n/j/y g:i a", strtotime($c["results"][$i]["toDateTime"]))?><input type="hidden" name="tariffInputs[<?=$j?>][toDateTime]" value="<?=$c[results][$i][toDateTime]?>"/></td>
-		<td><? if ($c["results"][$i]["key"] != 'consumption' && $c["results"][$i]["key"] != 'demand') {
-			$gpk = $gen->getPropertyKey(array('keyName'=> $c["results"][$i]["key"])); $gpk= json_decode($gpk, true);
+		<td><? if ($c["results"][$i]["keyName"] != 'consumption' && $c["results"][$i]["keyName"] != 'demand') {
+			$gpk = $gen->getPropertyKey(array('keyName'=> $c["results"][$i]["keyName"])); $gpk= json_decode($gpk, true);
 			if ($gpk["results"][0]["dataType"] == "CHOICE" || $gpk["results"][0]["dataType"] == "BOOLEAN") { ?>
-			<select name="tariffInputs[<?=$i?>][value]" class="tariffValue">
+			<select name="tariffInputs[<?=$i?>][dataValue]" class="tariffValue">
 				<? for ($j = 0; $j < sizeof($gpk["results"][0]["choices"]); $j++) { ?>
 				<option value="<?=$gpk["results"][0]["choices"][$j]["value"]?>"><?=$gpk["results"][0]["choices"][$j]["displayValue"]?></option>
 				<? } ?>
 			</select>
 			<? } else { ?>
-			<input type="text" name="tariffInputs[<?=$i?>][value]" class="tariffValue" placeholder="Enter <?=ucwords(strtolower($gpk["results"][0]["dataType"]))?>"/>
+			<input type="text" name="tariffInputs[<?=$i?>][dataValue]" class="tariffValue" placeholder="Enter <?=ucwords(strtolower($gpk["results"][0]["dataType"]))?>"/>
 			<? } ?>
 		<? } else { ?>
-		<input type="text" name="tariffInputs[<?=$i?>][value]" class="tariffValue"/>
+		<input type="text" name="tariffInputs[<?=$i?>][dataValue]" class="tariffValue"/>
 		<? }?></td>
 		<td><?=$c["results"][$i]["unit"]?><input type="hidden" name="tariffInputs[<?=$j?>][unit]" value="<?=$c[results][$i][unit]?>"/></td>
 	</tr>
