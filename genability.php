@@ -71,7 +71,12 @@ class genability {
 		if ($params['populateRates'] == true) {
 			$url .= "&populateRates=true";
 		} else {
-			$url .= "&populateRates=true";
+			$url .= "&populateRates=false";
+		}
+		if ($params['populateProperties'] == false) {
+			$url .= "&populateProperties=false";
+		} else {
+			$url .= "&populateProperties=true";
 		}
 
 		if ($this->config['debug']) { echo $url; }
@@ -136,15 +141,12 @@ class genability {
 	 * <https://developer.genability.com/documentation/api-reference/pricing/calculate>
 	 */
 	function getCalculateInputs($params) {
-		$url = $this->GENABILITY_API_URL_BETA . "calculate/" . $params['masterTariffId'] . $this->API_PARAMS
-			. "&fromDateTime=" . rawurlencode($params['fromDateTime'])
-			. "&toDateTime=" . rawurlencode($params['toDateTime']);
+		$url = $this->GENABILITY_API_URL_BETA . "calculate/" . $params['tariffId'] . $this->API_PARAMS;
 
-		// optional paramters
-		if ($params['territoryId']) {
-			$url .= "&territoryId=" . $params['territoryId'];
+		foreach ($params as $k => $v) {
+			$url .= "&" . rawurlencode($k) . "=" . rawurlencode($v);
 		}
-		
+
 		if ($this->config['debug']) { echo $url; }
 
 		$ch = curl_init();

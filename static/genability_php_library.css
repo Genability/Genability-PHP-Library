@@ -42,7 +42,7 @@ h3.nav {
 
 #genability {
 	background: #fff url('../static/images/genability_logo.png') no-repeat 0 0;
-	width: 168px; height: 80px;
+	width: 165px; height: 100px;
 	text-indent: -9999px;
 	margin-bottom: 15px;
 }
@@ -264,4 +264,9 @@ button {
 
 #metadataInputs2 {
 	display: none;
+}
+
+#proceed {
+	clear: both;
+	margin: 20px 0 0 240px;
 }

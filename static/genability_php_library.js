@@ -45,7 +45,7 @@ $(function (){
 	$("input[name=fromDateTime]").datepicker({dateFormat: "yy-mm-dd'T00:00:00.0-0700'"});
 	$("input[name=toDateTime]").datepicker({dateFormat: "yy-mm-dd'T00:00:00.0-0700'"});
 
-	$("select[name=timezone]").change(function() {
+	$("select[name=timezone],input[name=fromDateTime],input[name=toDateTime]").change(function() {
 		$("input[name=fromDateTime]").val($("input[name=fromDateTime]").val().substring(0,21) + $("select[name=timezone]").val());
 		$("input[name=toDateTime]").val($("input[name=toDateTime]").val().substring(0,21) + $("select[name=timezone]").val());
 		selectedTimezone = $("select[name=timezone]").val();
@@ -112,14 +112,6 @@ $(function (){
 });
 
 function generateTariffInputs(startDate, endDate, breakdown) {
-	console.log(selectedTimezone);
-	// if currJ exists, get it and then add j to offset
-	if ($("#currj").is('*')) {
-		tariffInputsArrayOffset = $("#currj").val();
-	} else {
-		tariffInputsArrayOffset = 0;
-	}
-
 	// clear current inputs
 	$("#generatedInputs").html("");
 	$("#metadataInputs").html("");
@@ -137,6 +129,15 @@ function generateTariffInputs(startDate, endDate, breakdown) {
 
 	// show easy input
 	$("#easyInput").show();
+
+	// if currJ exists, get it and then add j to offset
+	if ($("#currj").is('*')) {
+		tariffInputsArrayOffset = $("#currj").val();
+	} else {
+		tariffInputsArrayOffset = 0;
+	}
+
+	console.log(tariffInputsArrayOffset);
 
 	// convert the dates to something javascript will like
 	var startDatejs = new Date(startDate.substr(5,2) +"/" + startDate.substr(8,2) + "/" + startDate.substr(0,4));
@@ -258,7 +259,7 @@ function appendTariffInput(i, fromDateTime, toDateTime, label) {
 	if (tariffInputsArrayOffset) {
 		i = i + parseInt(tariffInputsArrayOffset);
 	}
-	$("<input/>").attr("name", "tariffInputs[" + i + "][key]").attr("type", "hidden").attr("value", "consumption").appendTo("#generatedInputs");
+	$("<input/>").attr("name", "tariffInputs[" + i + "][keyName]").attr("type", "hidden").attr("value", "consumption").appendTo("#generatedInputs");
 	$("<input/>").attr("name", "tariffInputs[" + i + "][fromDateTime]").attr("type", "hidden").attr("value", fromDateTime).appendTo("#generatedInputs");
 	$("<input/>").attr("name", "tariffInputs[" + i + "][toDateTime]").attr("type", "hidden").attr("value", toDateTime).appendTo("#generatedInputs");
 	$("<label/>").attr("for", "tariffInputs[" + i + "][dataValue]").html(label).appendTo("#generatedInputs");
