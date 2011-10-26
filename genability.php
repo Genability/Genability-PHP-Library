@@ -104,8 +104,19 @@ class genability {
 		$url = $this->GENABILITY_API_URL . "tariffs/" . $this->API_PARAMS;
 
 		foreach ($params as $key => $value) {
-			if ($value != null || $value != '')
-				$url .= "&" . $key . "=" . rawurlencode($value);
+			if ($value != null || $value != '') {
+				$url .= "&" . $key . "=";
+				if (is_array($value)) {
+					for ($i=0; $i < sizeof($value); $i++) {
+						if ($i > 0) {
+							$url .= ',';
+						}
+						$url .= $value[$i];
+					}
+				} else {
+					$url .= rawurlencode($value);
+				}
+			}
 		}
 
 		if ($this->config['debug']) { echo $url; }	
