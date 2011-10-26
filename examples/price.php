@@ -50,7 +50,7 @@ require_once('../genability.php');
 $gen = new genability(array(
   'app_id'  => 'your-app-id-here',    // Your Unique Genability Application ID <https://developer.genability.com/admin/applications>
   'app_key' => 'your-app-key-here',   // Your Unique Genability Application Key <https://developer.genability.com/admin/applications>
-  //'debug'   => true,                // Debug mode echos API Url & POST data if set to true (Optional)
+  'debug'   => false,                // Debug mode echos API Url & POST data if set to true (Optional)
 ));
 
 // make the getPrice call
@@ -82,7 +82,7 @@ $output = $gen->getPrice(array(
 		<h1 id="genability"><a href="http://genability.com/" target="_blank">Powered by Genability</a></h1>
 		<p><a href="https://developer.genability.com/documentation/api-reference/public/price" target="_blank">Get Price Documentation</a></p>
 	</div>
-	<h3 class="nav">Genability API PHP Library :: Examples :: <a href="tariff.php">Tariff</a> | <a href="price.php">Price</a> | <a href="calculate.php">Calculate</a></h3>
+	<h3 class="nav">Genability API PHP Library :: Examples :: <a href="tariff.php">Tariff</a> | <a href="tariffs.php">Tariffs</a> | <a href="price.php">Price</a> | <a href="calculate.php">Calculate</a></h3>
 	<h2>Get Price Example</h2>
 	<form id="genabilityExammple" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
 		<div class="inputBlock">

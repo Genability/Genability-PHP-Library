@@ -6,9 +6,9 @@
  * or follow us on Twitter @genabilityapi
  *
  * @author Matthew Fong <mfong@genability.com> @matthewfong
- * @version 0.75
+ * @version 0.86
  *
- * Last Updated: August 11, 2011
+ * Last Updated: October 26, 2011
  */
 
 /**
@@ -80,6 +80,35 @@ class genability {
 		}
 
 		if ($this->config['debug']) { echo $url; }
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
+		$result = curl_exec($ch);
+		$info = curl_getinfo($ch);
+		curl_close($ch);
+		
+		return $result;
+	}
+
+	/**
+	 * getTariffs
+	 *
+	 * Get a List of Tariffs
+	 * This allows you to search for a set of Tariffs and get them back as a list of Tariff objects in the
+	 * standard response format.
+	 * <https://developer.genability.com/documentation/api-reference/public/tariff#getTariffs>
+	 */
+	function getTariffs($params) {
+		$url = $this->GENABILITY_API_URL . "tariffs/" . $this->API_PARAMS;
+
+		foreach ($params as $key => $value) {
+			if ($value != null || $value != '')
+				$url .= "&" . $key . "=" . $value;
+		}
+
+		if ($this->config['debug']) { echo $url; }	
 
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL,$url);
