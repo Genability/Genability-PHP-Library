@@ -105,7 +105,7 @@ class genability {
 
 		foreach ($params as $key => $value) {
 			if ($value != null || $value != '')
-				$url .= "&" . $key . "=" . $value;
+				$url .= "&" . $key . "=" . rawurlencode($value);
 		}
 
 		if ($this->config['debug']) { echo $url; }	
