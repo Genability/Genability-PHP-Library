@@ -42,14 +42,14 @@ $(function (){
 		selectedTimezone = $("input[name=timezone]").val();
 	}
 
-	$("input[name=fromDateTime]").datepicker({dateFormat: "yy-mm-dd'T00:00:00.0-0700'"});
-	$("input[name=toDateTime]").datepicker({dateFormat: "yy-mm-dd'T00:00:00.0-0700'"});
+	$("input[name=fromDateTime]").datepicker({dateFormat: "yy-mm-dd'T00:00:00.0Z'"});
+	$("input[name=toDateTime]").datepicker({dateFormat: "yy-mm-dd'T00:00:00.0Z'"});
 
-	$("select[name=timezone],input[name=fromDateTime],input[name=toDateTime]").change(function() {
+	/*$("select[name=timezone],input[name=fromDateTime],input[name=toDateTime]").change(function() {
 		$("input[name=fromDateTime]").val($("input[name=fromDateTime]").val().substring(0,21) + $("select[name=timezone]").val());
 		$("input[name=toDateTime]").val($("input[name=toDateTime]").val().substring(0,21) + $("select[name=timezone]").val());
 		selectedTimezone = $("select[name=timezone]").val();
-	});
+	});*/
 	
 	$("a[href=#fillAll]").click(function(e) {
 		e.preventDefault();

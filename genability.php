@@ -265,5 +265,270 @@ class genability {
 		
 		return $result;
 	}
+
+
+
+
+	/**
+	 * Accounts
+	 */
+
+	/**
+	 * getAccount
+	 */
+	function getAccount($accountId) {
+		$url = $this->GENABILITY_API_URL_BETA . "accounts/" . $accountId . $this->API_PARAMS;
+
+		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
+		$result = curl_exec($ch);
+		$info = curl_getinfo($ch);
+		curl_close($ch);
+		
+		return $result;
+	}
+
+	/**
+	 * getAccounts
+	 */
+	function getAccounts($params=NULL) {
+		$url = $this->GENABILITY_API_URL_BETA . "accounts/" . $this->API_PARAMS;
+
+		// optional parameters
+		if ($params['search']) {
+			$url .= "&search=" . $params['toDateTime'];
+		}
+
+		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
+		$result = curl_exec($ch);
+		$info = curl_getinfo($ch);
+		curl_close($ch);
+		
+		return $result;
+	}
+
+	/**
+	 * deleteAccount
+	 */
+	function deleteAcount($accountId) {
+		$url = $this->GENABILITY_API_URL_BETA . "accounts/" . $accountId . $this->API_PARAMS;
+
+		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+		$result = curl_exec($ch);
+		$info = curl_getinfo($ch);
+		curl_close($ch);
+		
+		return $result;
+	}
+
+	/**
+	 * addAccount
+	 */
+	function addAccount($params) {
+		$url = $this->GENABILITY_API_URL_BETA . "accounts/" . $this->API_PARAMS;
+
+		foreach($params as $key=>$value) {
+			if ($key != "providerOrgId" && $key != "accountName" && $key != "customerOrgName" && $key != "providerAccountId") unset($params[$key]);
+			elseif ($value == "" || $value == NULL) unset($params[$key]);
+		}
+		$params = json_encode($params);
+
+		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
+		curl_setopt($ch,CURLOPT_POST,true);
+		curl_setopt ($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8'));
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+		$result = curl_exec($ch);
+		$info = curl_getinfo($ch);
+		curl_close($ch);
+		
+		return $result;
+	}
+
+	/**
+	 * updateAccount
+	 */
+	function updateAccount($params) {
+		$url = $this->GENABILITY_API_URL_BETA . "accounts/" . $this->API_PARAMS;
+
+		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+		$result = curl_exec($ch);
+		$info = curl_getinfo($ch);
+		curl_close($ch);
+		
+		return $result;
+	}
+
+	/**
+	 * addAccountProperty
+	 */
+	function addAccountProperty($accountId, $params) {
+		$url = $this->GENABILITY_API_URL_BETA . "accounts/" . $accountId . "/properties" . $this->API_PARAMS;
+
+		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+		$result = curl_exec($ch);
+		$info = curl_getinfo($ch);
+		curl_close($ch);
+		
+		return $result;
+	}
+
+	/**
+	 * updateAccountProperty
+	 */
+	function updateAccountProperty($accountId, $params) {
+		$url = $this->GENABILITY_API_URL_BETA . "accounts/" . $accountId . "/properties" . $this->API_PARAMS;
+
+		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+		$result = curl_exec($ch);
+		$info = curl_getinfo($ch);
+		curl_close($ch);
+		
+		return $result;
+	}
+
+	/**
+	 * deleteAccountProperty
+	 */
+	function deleteAcountProperty($accountId, $keyname) {
+		$url = $this->GENABILITY_API_URL_BETA . "accounts/" . $accountId . "/properties/" . $keyname . $this->API_PARAMS;
+
+		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+		$result = curl_exec($ch);
+		$info = curl_getinfo($ch);
+		curl_close($ch);
+		
+		return $result;
+	}
+
+	/**
+	 * Usage Profile
+	 */
+
+	function addProfile($params) {
+		$url = $this->GENABILITY_API_URL_BETA . "usage/profiles" . $this->API_PARAMS;
+
+		foreach($params as $key=>$value) {
+			if ($key != "accountId" && $key != "profileName" && $key != "description") unset($params[$key]);
+			elseif ($value == "" || $value == NULL) unset($params[$key]);
+		}
+		$params = json_encode($params);
+
+		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
+		curl_setopt($ch,CURLOPT_POST,true);
+		curl_setopt ($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8'));
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+		$result = curl_exec($ch);
+		$info = curl_getinfo($ch);
+		curl_close($ch);
+		
+		return $result;
+	}
+
+	function getProfiles($accountId = NULL) {
+		$url = $this->GENABILITY_API_URL_BETA . "usage/profiles" . $this->API_PARAMS;
+
+		// optional parameter
+		if ($accountId) {
+			$url .= "&appId=" . $accountId;
+		}
+
+		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
+		$result = curl_exec($ch);
+		$info = curl_getinfo($ch);
+		curl_close($ch);
+		
+		return $result;
+	}
+
+	function getProfile($params) {
+		$url = $this->GENABILITY_API_URL_BETA . "usage/profiles/" . $params['profileId'] . $this->API_PARAMS;
+		if ($params['fromDateTime']) {
+			$url .= "&fromDateTime=" . $params['fromDateTime'];
+		}
+		if ($params['toDateTime']) {
+			$url .= "&toDateTime=" . $params['toDateTime'];
+		}
+		if ($params['populateUsageData'] == false) {
+			$url .= "&populateUsageData=false";
+		} else {
+			$url .= "&populateUsageData=true";
+		}
+		if ($params['groupBy']) {
+			$url .= "&groupBy=" . $params['groupBy'];
+		}
+		if ($params['clipBy']) {
+			$url .= "&clipBy=" . $params['clipBy'];
+		}
+
+		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+		$result = curl_exec($ch);
+		$info = curl_getinfo($ch);
+		curl_close($ch);
+		
+		return $result;
+	}
+
 }
 ?>
