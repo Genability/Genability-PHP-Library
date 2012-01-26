@@ -4,9 +4,9 @@ require_once('../genability.php');
 
 // set your app id and app key
 $gen = new genability(array(
-  'app_id'  => 'your-app-id-here',    // Your Unique Genability Application ID <https://developer.genability.com/admin/applications>
-  'app_key' => 'your-app-key-here',   // Your Unique Genability Application Key <https://developer.genability.com/admin/applications>
-  'debug'   => false,                // Debug mode echos API Url & POST data if set to true (Optional)
+  'app_id'  => '49c67ab6',    // Your Unique Genability Application ID <https://developer.genability.com/admin/applications> 0e37899c
+  'app_key' => '11726b385d8cb61afbd749d681c5774e',   // Your Unique Genability Application Key <https://developer.genability.com/admin/applications>
+  'debug'   => true,                // Debug mode echos API Url & POST data if set to true (Optional)
 ));
 
 if ($_POST) {

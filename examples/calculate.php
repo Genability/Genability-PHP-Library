@@ -9,6 +9,10 @@ $gen = new genability(array(
   'debug'   => false,                // Debug mode echos API Url & POST data if set to true (Optional)
 ));
 
+// check to see if this account has accounts
+$accounts = $gen->getAccounts();
+$accounts = json_decode($accounts);
+
 // set the default timezone for php date methods <http://www.php.net/manual/en/function.date-default-timezone-set.php>
 switch ($_POST['timezone']) {
 	case "-0400":
@@ -30,6 +34,10 @@ $toDateTime = '2011-'.date('m', mktime(0, 0, 0, date("m")+1, date("d"), date("Y"
 
 if ($_POST['tariffId']) {
 	$TARIFF_ID = $_POST['tariffId'];
+}
+
+if ($_POST['accountId']) {
+	$ACCOUNT_ID = $_POST['accountId'];
 }
 
 if ($_POST['fromDateTime']) {
@@ -59,7 +67,6 @@ if ($_POST['tariffInputs']) {
 	  'territoryId'   => $_POST['territoryId'],    // The territory ID of where the usage consumption occurred. (Optional)
 	  'detailLevel'   => $_POST['detailLevel'],    // (Optional)
 	  'tariffInputs'  => $_POST['tariffInputs'],   // The input values to use when running the calculation. (Array)
-	  
 	));
 } elseif ($_POST['fromDateTime'] && $_POST['toDateTime']) {
 	$output = $gen->getCalculateInputs($_POST);
@@ -68,7 +75,8 @@ if ($_POST['tariffInputs']) {
 	$output = $gen->getTariff(array(
 		'masterTariffId'=> $TARIFF_ID,	// Unique Genability ID (primary key) for this tariff
 		'populateRates' => true,	// Populates the rate details for this Tariff (Boolean). The PHP Library defaults to false if not set
-		'populateProperties' => true	// Populates the rate properties needed to get the calculator inputs (Boolean). populateRates is needed for populateProperties
+		'populateProperties' => true,	// Populates the rate properties needed to get the calculator inputs (Boolean). populateRates is needed for populateProperties
+		'accountId'=> $ACCOUNT_ID
 	));
 }
 
@@ -103,6 +111,24 @@ $c = json_decode($output, true);
 			<input type="text" name="tariffId" id ="tariffId"/>
 			<? } ?>
 		</div>
+<?if (sizeof($accounts->results)>0 && (!$_POST || $_POST['accountId'] != '')) {?>
+		<div class="inputBlock">
+			<label for="accountId">Account Id(Optional)</label>
+			<? if ($ACCOUNT_ID) {
+			echo $ACCOUNT_ID; ?>
+			<input type="hidden" name="accountId" value="<?=$ACCOUNT_ID;?>"/>
+			<? } else { ?>
+			<select id="accountId" name="accountId">
+				<option value="">--</option>
+			<?for ($i=0; $i<sizeof($accounts->results); $i++) {?>
+				<option value="<?=$accounts->results[$i]->accountId?>"<?if ($_POST['accountId'] == $accounts->results[$i]->accountId) echo ' selected="selected"';?>><?if ($accounts->results[$i]->accountName) echo $accounts->results[$i]->accountName . ' (' . $accounts->results[$i]->accountId . ')'; else echo $accounts->results[$i]->accountId;?></option>
+			<?}?>
+			</select>
+			<?}?>
+		</div>
+<?} else {?>
+		<input type="hidden" name="accountId" value=""/>
+<?}?>
 		<? if ($TERRITORY_ID) { ?>
 		<div class="inputBlock">
 			<label for="territoryId">Territory Id</label>
@@ -343,6 +369,15 @@ $c = json_decode($output, true);
 		<td><?=$c["results"][$i]["unit"]?><input type="hidden" name="tariffInputs[<?=$i?>][unit]" value="<?=$c[results][$i][unit]?>"/></td>
 	</tr>
 <?	}
+if ($ACCOUNT_ID) { ?>
+	<tr>
+		<td>accountId<input type="hidden" name="tariffInputs[<?=$i?>][keyName]" value="accountId"/></td>
+		<td></td>
+		<td></td>
+		<td><input type="hidden" name="tariffInputs[<?=$i?>][dataValue]" value="<?=$ACCOUNT_ID?>"/><?=$ACCOUNT_ID?></td>
+		<td></td>
+	</tr>
+<? }
 ?>
 </table>
 <? } ?>

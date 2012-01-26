@@ -43,6 +43,10 @@ if ($_POST['demandAmount']) {
 	$DEMAND_AMOUNT = '500';
 }
 
+if ($_POST['accountId']) {
+	$ACCOUNT_ID = $_POST['accountId'];
+}
+
 /** include the Genability PHP Library */
 require_once('../genability.php');
 
@@ -53,6 +57,10 @@ $gen = new genability(array(
   'debug'   => false,                // Debug mode echos API Url & POST data if set to true (Optional)
 ));
 
+// check to see if this account has accounts
+$accounts = $gen->getAccounts();
+$accounts = json_decode($accounts);
+
 // make the getPrice call
 $output = $gen->getPrice(array(
   'masterTariffId'    => $TARIFF_ID,           // Unique Genability ID (primary key) for this tariff
@@ -61,6 +69,7 @@ $output = $gen->getPrice(array(
   'territoryId'       => $TERRITORY_ID,        // When specified, rate changes returned will be for the specified Territory. (Optional)
   'consumptionAmount' => $CONSUMPTION_AMOUNT,  // A monthly consumption in kWh. (Optional)
   'demandAmount'      => $DEMAND_AMOUNT,       // A monthly demand in kW. (Optional)
+  'accountId'         => $ACCOUNT_ID
 ));
 
 ?>
@@ -122,6 +131,17 @@ $output = $gen->getPrice(array(
 			<label for="demandAmount">Demand Amount</label>
 			<input type="text" name="demandAmount" value="<?=$DEMAND_AMOUNT?>"/>
 		</div>
+<?if (sizeof($accounts->results)>0) {?>
+		<div class="inputBlock">
+			<label for="accountId">Account Id(Optional)</label>
+			<select id="accountId" name="accountId">
+				<option value="">--</option>
+			<?for ($i=0; $i<sizeof($accounts->results); $i++) {?>
+				<option value="<?=$accounts->results[$i]->accountId?>"<?if ($_POST['accountId'] == $accounts->results[$i]->accountId) echo ' selected="selected"';?>><?if ($accounts->results[$i]->accountName) echo $accounts->results[$i]->accountName . ' (' . $accounts->results[$i]->accountId . ')'; else echo $accounts->results[$i]->accountId;?></option>
+			<?}?>
+			</select>
+		</div>
+<?}?>
 		<button type="submit">Get Prices!</button>
 	</form>
 

@@ -160,6 +160,9 @@ class genability {
 		if ($params['demand']) {
 			$url .= "&demand=" . $params['demand'];
 		}
+		if ($params['accountId']) {
+			$url .= "&accountId=" . $params['accountId'];
+		}
 
 		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
 
@@ -187,7 +190,8 @@ class genability {
 		$url = $this->GENABILITY_API_URL_BETA . "calculate/" . $params['tariffId'] . $this->API_PARAMS;
 
 		foreach ($params as $k => $v) {
-			$url .= "&" . rawurlencode($k) . "=" . rawurlencode($v);
+			if ($v)
+				$url .= "&" . rawurlencode($k) . "=" . rawurlencode($v);
 		}
 
 		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
@@ -226,6 +230,10 @@ class genability {
 		}
 		$data['detailLevel'] = $params['detailLevel'];
 		$data['tariffInputs'] = $params['tariffInputs'];
+		if ($params['accountId']) {
+			$data['tariffInputs'][0]['keyName'] = 'accountId';
+			$data['tariffInputs'][0]['dataValue'] = $params['accountId'];
+		}
 		$data = json_encode($data);
 
 		if ($this->config['debug']) { echo $data; }
@@ -532,8 +540,6 @@ class genability {
 		
 		return $result;
 	}
-
-
 
 }
 ?>
