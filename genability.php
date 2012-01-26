@@ -78,8 +78,11 @@ class genability {
 		} else {
 			$url .= "&populateProperties=true";
 		}
+		if ($params['accountId']) {
+			$url .= "&accountId=" . $params['accountId'];
+		}
 
-		if ($this->config['debug']) { echo $url; }
+		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
 
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL,$url);
@@ -119,7 +122,7 @@ class genability {
 			}
 		}
 
-		if ($this->config['debug']) { echo $url; }	
+		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }	
 
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL,$url);
@@ -158,7 +161,7 @@ class genability {
 			$url .= "&demand=" . $params['demand'];
 		}
 
-		if ($this->config['debug']) { echo $url; }
+		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
 
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL,$url);
@@ -187,7 +190,7 @@ class genability {
 			$url .= "&" . rawurlencode($k) . "=" . rawurlencode($v);
 		}
 
-		if ($this->config['debug']) { echo $url; }
+		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
 
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL,$url);
@@ -212,7 +215,7 @@ class genability {
 	function getCalculation($params) {
 		$url = $this->GENABILITY_API_URL_BETA . "calculate/" . $params['masterTariffId'];
 
-		if ($this->config['debug']) { echo $url; }
+		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
 
 		$data['appId'] = $this->APP_ID;
 		$data['appKey'] = $this->APP_KEY;
@@ -253,7 +256,7 @@ class genability {
 	function getPropertyKey($params) {
 		$url = $this->GENABILITY_API_URL . "properties/" . $params['keyName'] . $this->API_PARAMS;
 
-		if ($this->config['debug']) { echo $url; }
+		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
 
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL,$url);
@@ -529,6 +532,8 @@ class genability {
 		
 		return $result;
 	}
+
+
 
 }
 ?>

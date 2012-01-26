@@ -9,13 +9,18 @@ $gen = new genability(array(
   'debug'   => false,                // Debug mode echos API Url & POST data if set to true (Optional)
 ));
 
+// check to see if this account has accounts
+$accounts = $gen->getAccounts();
+$accounts = json_decode($accounts);
+
 if ($_POST) {
 	// make the getTariffs call
 	$output = $gen->getTariffs(array(
 		'search'	=>	$_POST['search'],
 		'zipCode'	=>	$_POST['zipCode'],
 		'tariffTypes'	=>	$_POST['tariffTypes'],
-		'sortOn'	=>	$_POST['sortOn']
+		'sortOn'	=>	$_POST['sortOn'],
+		'accountId'     =>      $_POST['accountId']
 	));
 }
 ?>
@@ -49,20 +54,31 @@ if ($_POST) {
 		</div>
 		<div class="inputBlock">
 			<label>Tariff Types</label>
-			<input type="checkbox" name="tariffTypes[]" value="DEFAULT" id="default"<?if ($_POST) foreach($_POST['tariffTypes'] as $option) { if ($option == 'DEFAULT') echo ' checked'; }?>><label for="default" class="cb">Default</label>
-			<input type="checkbox" name="tariffTypes[]" value="ALTERNATIVE" id="alternative"<?if ($_POST) foreach($_POST['tariffTypes'] as $option) { if ($option == 'ALTERNATIVE') echo ' checked'; }?>><label for="alternative" class="cb">Alternative</label>
-			<input type="checkbox" name="tariffTypes[]" value="OPTIONAL_EXTRA" id="optional_extra"<?if ($_POST) foreach($_POST['tariffTypes'] as $option) { if ($option == 'OPTIONAL_EXTRA') echo ' checked'; }?>><label for="optional_extra" class="cb">Optional Extra</label>
-			<input type="checkbox" name="tariffTypes[]" value="RIDER" id="rider"<?if ($_POST) foreach($_POST['tariffTypes'] as $option) { if ($option == 'RIDER') echo ' checked'; }?>><label for="rider" class="cb">Rider</label>
+			<input type="checkbox" name="tariffTypes[]" value="DEFAULT" id="default"<?if ($_POST['tariffTypes']) foreach($_POST['tariffTypes'] as $option) { if ($option == 'DEFAULT') echo ' checked'; }?>><label for="default" class="cb">Default</label>
+			<input type="checkbox" name="tariffTypes[]" value="ALTERNATIVE" id="alternative"<?if ($_POST['tariffTypes']) foreach($_POST['tariffTypes'] as $option) { if ($option == 'ALTERNATIVE') echo ' checked'; }?>><label for="alternative" class="cb">Alternative</label>
+			<input type="checkbox" name="tariffTypes[]" value="OPTIONAL_EXTRA" id="optional_extra"<?if ($_POST['tariffTypes']) foreach($_POST['tariffTypes'] as $option) { if ($option == 'OPTIONAL_EXTRA') echo ' checked'; }?>><label for="optional_extra" class="cb">Optional Extra</label>
+			<input type="checkbox" name="tariffTypes[]" value="RIDER" id="rider"<?if ($_POST['tariffTypes']) foreach($_POST['tariffTypes'] as $option) { if ($option == 'RIDER') echo ' checked'; }?>><label for="rider" class="cb">Rider</label>
 		</div>
 		<div class="inputBlock">
 			<label>Sort On</label>
-			<input type="checkbox" name="sortOn[]" value="masterTariffId" id="sort_masterTariffId"<?if ($_POST) foreach($_POST['sortOn'] as $option) { if ($option == 'masterTariffId') echo ' checked'; }?>><label for="sort_masterTariffId" class="cb">Master Tariff Id</label>
-			<input type="checkbox" name="sortOn[]" value="lseId" id="sort_lseId"<?if ($_POST) foreach($_POST['sortOn'] as $option) { if ($option == 'lseId') echo ' checked'; }?>><label for="sort_lseId" class="cb">LSE Id</label>
-			<input type="checkbox" name="sortOn[]" value="lseName" id="sort_lseName"<?if ($_POST) foreach($_POST['sortOn'] as $option) { if ($option == 'lseName') echo ' checked'; }?>><label for="sort_lseName" class="cb">LSE Name</label>
-			<input type="checkbox" name="sortOn[]" value="tariffCode" id="sort_tariffCode"<?if ($_POST) foreach($_POST['sortOn'] as $option) { if ($option == 'tariffCode') echo ' checked'; }?>><label for="sort_tariffCode" class="cb">Tariff Code</label>
-			<input type="checkbox" name="sortOn[]" value="tariffName" id="sort_tariffName"<?if ($_POST) foreach($_POST['sortOn'] as $option) { if ($option == 'tariffName') echo ' checked'; }?>><label for="sort_tariffName" class="cb">Tariff Name</label>
-			<input type="checkbox" name="sortOn[]" value="tariffType" id="sort_tariffType"<?if ($_POST) foreach($_POST['sortOn'] as $option) { if ($option == 'tariffType') echo ' checked'; }?>><label for="sort_tariffType" class="cb">Tariff Type</label>
+			<input type="checkbox" name="sortOn[]" value="masterTariffId" id="sort_masterTariffId"<?if ($_POST['sortOn']) foreach($_POST['sortOn'] as $option) { if ($option == 'masterTariffId') echo ' checked'; }?>><label for="sort_masterTariffId" class="cb">Master Tariff Id</label>
+			<input type="checkbox" name="sortOn[]" value="lseId" id="sort_lseId"<?if ($_POST['sortOn']) foreach($_POST['sortOn'] as $option) { if ($option == 'lseId') echo ' checked'; }?>><label for="sort_lseId" class="cb">LSE Id</label>
+			<input type="checkbox" name="sortOn[]" value="lseName" id="sort_lseName"<?if ($_POST['sortOn']) foreach($_POST['sortOn'] as $option) { if ($option == 'lseName') echo ' checked'; }?>><label for="sort_lseName" class="cb">LSE Name</label>
+			<input type="checkbox" name="sortOn[]" value="tariffCode" id="sort_tariffCode"<?if ($_POST['sortOn']) foreach($_POST['sortOn'] as $option) { if ($option == 'tariffCode') echo ' checked'; }?>><label for="sort_tariffCode" class="cb">Tariff Code</label>
+			<input type="checkbox" name="sortOn[]" value="tariffName" id="sort_tariffName"<?if ($_POST['sortOn']) foreach($_POST['sortOn'] as $option) { if ($option == 'tariffName') echo ' checked'; }?>><label for="sort_tariffName" class="cb">Tariff Name</label>
+			<input type="checkbox" name="sortOn[]" value="tariffType" id="sort_tariffType"<?if ($_POST['sortOn']) foreach($_POST['sortOn'] as $option) { if ($option == 'tariffType') echo ' checked'; }?>><label for="sort_tariffType" class="cb">Tariff Type</label>
 		</div>
+<?if (sizeof($accounts->results)>0) {?>
+		<div class="inputBlock">
+			<label for="accountId">Account Id(Optional)</label>
+			<select id="accountId" name="accountId">
+				<option value="">--</option>
+			<?for ($i=0; $i<sizeof($accounts->results); $i++) {?>
+				<option value="<?=$accounts->results[$i]->accountId?>"<?if ($_POST['accountId'] == $accounts->results[$i]->accountId) echo ' selected="selected"';?>><?if ($accounts->results[$i]->accountName) echo $accounts->results[$i]->accountName . ' (' . $accounts->results[$i]->accountId . ')'; else echo $accounts->results[$i]->accountId;?></option>
+			<?}?>
+			</select>
+		</div>
+<?}?>
 		<button type="submit">Get Tariffs!</button>
 	</form>
 

@@ -28,6 +28,9 @@ if ($_POST) {
 		case "getProfile":
 			$gen->getProfile($_POST);
 			break;
+		case "uploadReadings":
+			$gen->uploadReadings($_POST);
+			break;
 	}
 }
 
@@ -240,6 +243,22 @@ echo '<form name="deleteAccount" action="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QU
 		}
 	} ?>
 
+<form action="<?=$_SERVER['PHP_SELF']?>?<?=$_SERVER['QUERY_STRING']?>" method="POST" enctype="multipart/form-data">
+<fieldset>
+	<legend>Upload Reading Data</legend>
+	<input type="hidden" name="action" value="uploadReadings"/>
+	<input type="hidden" name="profileId" value="<?=$profile["profileId"]?>"/>
+	<input type="hidden" name="fileFormat" value="espi"/>
+<div class="inputBlock">
+	<label for="fileData">file</label>
+	<input type="file" name="fileData" id="fileData"/>
+</div>
+<div class="inputBlock">
+	<input type="submit" value="Upload"/>
+</div>
+</fieldset>
+</form>
+
 <? } else { ?>
 Please connect your appId to Genability's Explorer.
 <?}?>
@@ -256,24 +275,5 @@ Please connect your appId to Genability's Explorer.
 	}?>
 
 </div>
-<style>
-.debugFunction {
-	display: block;
-	font-weight: bold;
-}
-.account {
-	border-bottom: 1px solid #ccc;
-	padding-bottom: 10px;
-	margin-bottom: 25px;
-}
-
-.accountProperties {
-	margin-left: 35px;
-}
-
-.inputBlock {
-	
-}
-</style>
 </body>
 </html>

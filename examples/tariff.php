@@ -15,6 +15,11 @@ if ($_POST['territoryId']) {
 	$TERRITORY_ID = $_POST['territoryId'];
 }
 
+// if an Account Id is passed through, set it
+if ($_POST['accountId']) {
+	$ACCOUNT_ID = $_POST['accountId'];
+}
+
 /** include the Genability PHP Library */
 require_once('../genability.php');
 
@@ -30,7 +35,12 @@ $output = $gen->getTariff(array(
   'masterTariffId'=> $TARIFF_ID,	// Unique Genability ID (primary key) for this tariff
   'populateRates' => true,		// Populates the rate details for this Tariff (Boolean). The PHP Library defaults to false if not set
   'territoryId'   => $TERRITORY_ID,     // When specified, rate changes returned will be for the specified Territory. (Optional)
+  'accountId'     => $ACCOUNT_ID,
 ));
+
+// check to see if this account has accounts
+$accounts = $gen->getAccounts();
+$accounts = json_decode($accounts);
 
 // helper method to display text easier (lowercase and without _s)
 function formatText($input) {
@@ -59,7 +69,7 @@ function formatText($input) {
 	<h2>Get Tariff Example</h2>
 	<form id="tariffForm" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
 		<div class="inputBlock">
-			<label for="tariff">Master Tariff Id</label>
+			<label for="tariffId">Master Tariff Id</label>
 			<input type="text" id="tariffId" name="tariff" value="<?=$TARIFF_ID?>"/>
 			<a href="#toggleTariffList">tariff cheat sheet</a>
 		</div>
@@ -81,8 +91,19 @@ function formatText($input) {
 		</div>
 		<div class="inputBlock">
 			<label for="territoryId">Territory Id(Optional)</label>
-			<input type="text" name="territoryId" value="<?=$TERRITORY_ID?>"/>
+			<input id="territoryId" type="text" name="territoryId" value="<?=$TERRITORY_ID?>"/>
 		</div>
+<?if (sizeof($accounts->results)>0) {?>
+		<div class="inputBlock">
+			<label for="accountId">Account Id(Optional)</label>
+			<select id="accountId" name="accountId">
+				<option value="">--</option>
+			<?for ($i=0; $i<sizeof($accounts->results); $i++) {?>
+				<option value="<?=$accounts->results[$i]->accountId?>"<?if ($_POST['accountId'] == $accounts->results[$i]->accountId) echo ' selected="selected"';?>><?if ($accounts->results[$i]->accountName) echo $accounts->results[$i]->accountName . ' (' . $accounts->results[$i]->accountId . ')'; else echo $accounts->results[$i]->accountId;?></option>
+			<?}?>
+			</select>
+		</div>
+<?}?>
 		<button type="submit">Get Tariff!</button>
 	</form>
 

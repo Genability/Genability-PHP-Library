@@ -72,6 +72,15 @@ label {
 	width: 250px;
 }
 
+label.cb {
+	float: none;
+	margin-left: 4px;
+}
+
+#tariffForm input[type="checkbox"] {
+	width: auto;
+}
+
 button {
 	position: relative;
 	left: 300px;
@@ -269,4 +278,18 @@ button {
 #proceed {
 	clear: both;
 	margin: 20px 0 0 240px;
+}
+
+.debugFunction {
+	display: block;
+	font-weight: bold;
+}
+.account {
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 10px;
+	margin-bottom: 25px;
+}
+
+.accountProperties {
+	margin-left: 35px;
 }
