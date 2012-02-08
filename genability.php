@@ -228,6 +228,9 @@ class genability {
 		if ($params['territoryId']) {
 			$data['territoryId'] = $params['territoryId'];
 		}
+		if ($params['billingPeriod'] == true) {
+			$data['billingPeriod'] = true;
+		}
 		$data['detailLevel'] = $params['detailLevel'];
 		$data['tariffInputs'] = $params['tariffInputs'];
 		if ($params['accountId']) {

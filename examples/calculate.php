@@ -67,6 +67,7 @@ if ($_POST['tariffInputs']) {
 	  'territoryId'   => $_POST['territoryId'],    // The territory ID of where the usage consumption occurred. (Optional)
 	  'detailLevel'   => $_POST['detailLevel'],    // (Optional)
 	  'tariffInputs'  => $_POST['tariffInputs'],   // The input values to use when running the calculation. (Array)
+	  'billingPeriod' => $_POST['billingPeriod']   // (Optional)
 	));
 } elseif ($_POST['fromDateTime'] && $_POST['toDateTime']) {
 	$output = $gen->getCalculateInputs($_POST);
@@ -235,6 +236,10 @@ $c = json_decode($output, true);
 					<option value="RATE" <?if ($_POST['detailLevel'] == 'RATE') echo 'selected';?>>Rate</option>
 				</select>
 			<? } ?>
+			</div>
+			<div class="inputBLock">
+				<input type="checkbox" id="billingPeriod" name="billingPeriod"/>
+				<label for="billingPeriod">Billing Period</label>
 			</div>
 			<div id="showInputs">
 				<label>Show Inputs</label>
