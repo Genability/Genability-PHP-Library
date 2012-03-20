@@ -290,8 +290,12 @@ class genability {
 	/**
 	 * getAccount
 	 */
-	function getAccount($accountId) {
+	function getAccount($accountId, $providerAccountId=NULL) {
 		$url = $this->GENABILITY_API_URL_BETA . "accounts/" . $accountId . $this->API_PARAMS;
+
+		if ($providerAccountId) {
+			$url .= "&providerAccountId=" . $providerAccountId;
+		}
 
 		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
 
@@ -315,6 +319,10 @@ class genability {
 		// optional parameters
 		if ($params['search']) {
 			$url .= "&search=" . $params['toDateTime'];
+		}
+
+		if ($params['providerAccountId']) {
+			$url .= "&providerAccountId=" . $params['providerAccountId'];
 		}
 
 		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
@@ -385,6 +393,7 @@ class genability {
 		$url = $this->GENABILITY_API_URL_BETA . "accounts/" . $this->API_PARAMS;
 
 		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
+		if ($this->config['debug']) { echo '<strong class="debugFunction">Params:</strong>'; print_r($params); }
 
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL,$url);

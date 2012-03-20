@@ -285,6 +285,7 @@ button {
 	font-weight: bold;
 }
 .account {
+	clear: both;
 	border-bottom: 1px solid #ccc;
 	padding-bottom: 10px;
 	margin-bottom: 25px;
@@ -292,4 +293,29 @@ button {
 
 .accountProperties {
 	margin-left: 35px;
+}
+
+.accountParam {
+	font-weight: bold;
+	font-variant: small-caps;
+	margin: 0 10px 0 25px;
+	display: inline-block;
+
+}
+
+.accountParam:after {
+		content: ':';
+}
+.inputBlock {
+	margin: 5px 0;
+}
+
+.halfandhalf {
+	width: 40%;
+	float: left;
+	margin-bottom: 50px;
+}
+
+.halfandhalf label {
+	width: 135px;
 }

@@ -4,14 +4,14 @@ require_once('../genability.php');
 
 // set your app id and app key
 $gen = new genability(array(
-  'app_id'  => '49c67ab6',    // Your Unique Genability Application ID <https://developer.genability.com/admin/applications> 0e37899c
-  'app_key' => '11726b385d8cb61afbd749d681c5774e',   // Your Unique Genability Application Key <https://developer.genability.com/admin/applications>
-  'debug'   => true,                // Debug mode echos API Url & POST data if set to true (Optional)
+  'app_id'  => 'your-app-id-here',    // Your Unique Genability Application ID <https://developer.genability.com/admin/applications>
+  'app_key' => 'your-app-key-here',   // Your Unique Genability Application Key <https://developer.genability.com/admin/applications>
+  'debug'   => false,                // Debug mode echos API Url & POST data if set to true (Optional)
 ));
 
 if ($_POST) {
 	//$addAccount - $gen->addAccount($_POST);
-	print_r($_POST);
+	//print_r($_POST);
 	switch ($_POST["action"]) {
 		case "addAccount":
 			$gen->addAccount($_POST);
@@ -21,6 +21,18 @@ if ($_POST) {
 			break;
 		case "deleteAccount":
 			$gen->deleteAcount($_POST["accountId"]);
+			break;
+		case "getAccount":
+			$url = $_SERVER['PHP_SELF'];
+			if ($_POST['accountId'] && $_POST['providerAccountId']) {
+				$url .= '?accountId=' . $_POST['accountId'];
+				$url .- '&providerAccountId=' . $_POST['providerAccountId'];
+			} elseif ($_POST['accountId']) {
+				$url .= '?accountId=' . $_POST['accountId'];
+			} elseif ($_POST['providerAccountId']) {
+				$url .= '?providerAccountId=' . $_POST['providerAccountId'];
+			}
+			echo("<script> top.location.href='" . $url . "'</script>");
 			break;
 		case "addProfile":
 			$gen->addProfile($_POST);
@@ -34,11 +46,23 @@ if ($_POST) {
 	}
 }
 
-if ($_GET["accountId"]) {
+if ($_GET["accountId"] && $_GET['providerAccountId']) {
+	$account = $gen->getAccount($_GET["accountId"], $_GET['providerAccountId']);
+	$account = json_decode($account, true);
+
+	$profiles = $gen->getProfiles($_GET["accountId"], $_GET['providerAccountId']);
+	$profiles = json_decode($profiles, true);
+} elseif ($_GET["accountId"]) {
 	$account = $gen->getAccount($_GET["accountId"]);
 	$account = json_decode($account, true);
 	
 	$profiles = $gen->getProfiles($_GET["accountId"]);
+	$profiles = json_decode($profiles, true);
+} elseif ($_GET['providerAccountId']) {
+	$account = $gen->getAccount(NULL, $_GET['providerAccountId']);
+	$account = json_decode($account, true);
+
+	$profiles = $gen->getProfiles(NULL, $_GET['providerAccountId']);
 	$profiles = json_decode($profiles, true);
 } elseif ($_GET["profileId"]) {
 	$profile = $gen->getProfile($_GET);
@@ -69,19 +93,15 @@ print_r($profile);
 		<h1 id="genability"><a href="http://genability.com/" target="_blank">Powered by Genability</a></h1>
 		<p><a href="https://developer.genability.com/documentation/api-reference/storage/account" target="_blank">Account Documentation</a></p>
 	</div>
-	<h3 class="nav">Genability API PHP Library :: Examples :: <a href="tariff.php">Tariff</a> | <a href="tariffs.php">Tariffs</a> | <a href="price.php">Price</a> | <a href="calculate.php">Calculate</a></h3>
+	<h3 class="nav">Genability API PHP Library :: Examples :: <a href="tariff.php">Tariff</a> | <a href="tariffs.php">Tariffs</a> | <a href="price.php">Price</a> | <a href="calculate.php">Calculate</a> | <a href="accountManager.php">Accounts</a></h3>
 	<h2>Account Manager</h2>
 
 <?
 if ($accounts["status"] == "success") { ?>
-<form action="<?=$_SERVER['PHP_SELF']?>?<?=$_SERVER['QUERY_STRING']?>" method="POST">
+<form class="halfandhalf" action="<?=$_SERVER['PHP_SELF']?>?<?=$_SERVER['QUERY_STRING']?>" method="POST">
 <fieldset>
 	<legend>Add A New Account</legend>
 	<input type="hidden" name="action" value="addAccount"/>
-<div class="inputBlock">
-	<label for="providerOrgId">providerOrgId</label>
-	<input name="providerOrgId" id="providerOrgId" value="ed0c24c4-045e-11e1-a79a-002354cc3b2e"/>
-</div>
 <div class="inputBlock">
 	<label for="accountName">accountName</label>
 	<input name="accountName" id="accountName"/>
@@ -90,25 +110,49 @@ if ($accounts["status"] == "success") { ?>
 	<label for="customerOrgName">customerOrgName</label>
 	<input name="customerOrgName" id="customerOrgName"/>
 </div>
-
 <div class="inputBlock">
 	<label for="providerAccountId">providerAccountId</label>
 	<input name="providerAccountId" id="providerAccountId"/>
 </div>
 <div class="inputBlock">
+	<label>&nbsp;</label>
 	<input type="submit" value="Add New Account"/>
 </div>
 </fieldset>
 </form>
+
+<form class="halfandhalf" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
+<fieldset>
+	<legend>Search Account</legend>
+	<input type="hidden" name="action" value="getAccount"/>
+<div class="inputBlock">
+	<label for="accountId">accountId</label>
+	<input name="accountId" id="accountId"/>
+</div>
+<div class="inputBlock">
+	<label for="accountName">accountName</label>
+	<input name="accountName" id="accountName"/>
+</div>
+<div class="inputBlock">
+	<label for="providerAccountId">providerAccountId</label>
+	<input name="providerAccountId" id="providerAccountId"/>
+</div>
+<div class="inputBlock">
+	<label>&nbsp;</label>
+	<input type="submit" value="Find Account"/>
+</div>
+</fieldset>
+</form>
+
 <?	foreach ($accounts["results"] as $account) {
 		if ($account["accountId"]) {
 			echo '<div class="account"><a href="accountManager.php?accountId=' . $account["accountId"] . '">';
 			if ($account["accountName"]) echo $account["accountName"];
 				else echo $account["accountId"];
-			echo '</a>';
-			if ($account["customerOrgName"]) echo 'customerOrgName: ' . $account["customerOrgName"];
-				elseif ($account["customerOrgId"]) echo 'customerOrgId: ' .  $account["customerOrgId"];
-			if ($account["providerAccountId"]) echo 'providerAccountId:' . $account["providerAccountId"];
+			echo '</a> (' . $account['status'] . ')';
+			if ($account["customerOrgName"]) echo '<br/><span class="accountParam">customerOrgName</span>' . $account["customerOrgName"];
+				elseif ($account["customerOrgId"]) echo '<br/><span class="accountParam">customerOrgId</span>' .  $account["customerOrgId"];
+			if ($account["providerAccountId"]) echo '<br/><span class="accountParam">providerAccountId</span>' . $account["providerAccountId"];
 echo '<form name="deleteAccount" action="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'" method="POST">
 	<input type="hidden" name="action" value="deleteAccount"/>
 	<input type="hidden" name="accountId" value="'.$account["accountId"].'">
@@ -267,7 +311,7 @@ Please connect your appId to Genability's Explorer.
 	echo 'Profiles:<br/>';
 		foreach ($profiles["results"] as $profile) {
 			if ($profile["profileName"]) {
-				echo '<a href="accountManager.php?profileId='.$profile["profileId"].'">' . $profile["profileName"] . '</a> (<a href="accountManager.php?profileId='.$profile["profileId"].'">' . $profile["profileId"] . '</a>)<br/>';
+				echo '<a href="accountManager.php?profileId='.$profile["profileId"].'">' . $profile["profileId"] . '</a> - <a href="accountManager.php?profileId='.$profile["profileId"].'">' . $profile["profileName"] . '</a><br/>';
 			} else {
 				echo '<a href="accountManager.php?profileId='.$profile["profileId"].'">' . $profile["profileId"] . '</a><br/>';
 			}
