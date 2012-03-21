@@ -220,7 +220,7 @@ class genability {
 	 * <https://developer.genability.com/documentation/api-reference/pricing/calculate>
 	 */
 	function getCalculation($params) {
-		$url = $this->GENABILITY_API_URL_BETA . "calculate/" . $params['masterTariffId'];
+		$url = $this->GENABILITY_API_URL_BETA . "calculate/" . $params['masterTariffId'] . $this->API_PARAMS;
 
 		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
 
