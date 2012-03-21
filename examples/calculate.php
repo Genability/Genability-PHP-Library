@@ -14,23 +14,11 @@ $accounts = $gen->getAccounts();
 $accounts = json_decode($accounts);
 
 // set the default timezone for php date methods <http://www.php.net/manual/en/function.date-default-timezone-set.php>
-switch ($_POST['timezone']) {
-	case "-0400":
-		date_default_timezone_set('America/New_York');
-		break;
-	case "-0500":
-		date_default_timezone_set('America/Chicago');
-		break;
-	case "-0600":
-		date_default_timezone_set('America/Boise');
-		break;
-	default:
-		date_default_timezone_set('America/Los_Angeles');
-}
+date_default_timezone_set('America/Los_Angeles');
 
 // default fromDateTime and toDateTime set to the first of this month and next month
-$fromDateTime = '2011-'.date('m').'-01T00:00:00.0-0700';
-$toDateTime = '2011-'.date('m', mktime(0, 0, 0, date("m")+1, date("d"), date("Y"))).'-01T00:00:00.0-0700';
+$fromDateTime = date('Y-m-d');
+$toDateTime = date('Y-m-d', mktime(0, 0, 0, date("m")+1, date("d"), date("Y")));
 
 if ($_POST['tariffId']) {
 	$TARIFF_ID = $_POST['tariffId'];
@@ -38,6 +26,10 @@ if ($_POST['tariffId']) {
 
 if ($_POST['accountId']) {
 	$ACCOUNT_ID = $_POST['accountId'];
+}
+
+if ($_POST['providerAccountId']) {
+	$PROVIDER_ACCOUNT_ID = $_POST['providerAccountId'];
 }
 
 if ($_POST['fromDateTime']) {
@@ -67,7 +59,9 @@ if ($_POST['tariffInputs']) {
 	  'territoryId'   => $_POST['territoryId'],    // The territory ID of where the usage consumption occurred. (Optional)
 	  'detailLevel'   => $_POST['detailLevel'],    // (Optional)
 	  'tariffInputs'  => $_POST['tariffInputs'],   // The input values to use when running the calculation. (Array)
-	  'billingPeriod' => $_POST['billingPeriod']   // (Optional)
+	  'billingPeriod' => $_POST['billingPeriod'],  // (Optional)
+	  'accountId'     => $_POST['accountId'],
+	  'providerAccountId' => $_POST['providerAccountId']
 	));
 } elseif ($_POST['fromDateTime'] && $_POST['toDateTime']) {
 	$output = $gen->getCalculateInputs($_POST);
@@ -77,7 +71,8 @@ if ($_POST['tariffInputs']) {
 		'masterTariffId'=> $TARIFF_ID,	// Unique Genability ID (primary key) for this tariff
 		'populateRates' => true,	// Populates the rate details for this Tariff (Boolean). The PHP Library defaults to false if not set
 		'populateProperties' => true,	// Populates the rate properties needed to get the calculator inputs (Boolean). populateRates is needed for populateProperties
-		'accountId'=> $ACCOUNT_ID
+		'accountId'=> $ACCOUNT_ID,
+		'providerAccountId'=> $PROVIDER_ACCOUNT_ID
 	));
 }
 
@@ -100,7 +95,7 @@ $c = json_decode($output, true);
 		<h1 id="genability"><a href="http://genability.com/" target="_blank">Powered by Genability</a></h1>
 		<p><a href="https://developer.genability.com/documentation/api-reference/pricing/calculate" target="_blank">Calculate Documentation</a></p>
 	</div>
-	<h3 class="nav">Genability API PHP Library :: Examples :: <a href="tariff.php">Tariff</a> | <a href="tariffs.php">Tariffs</a> | <a href="price.php">Price</a> | <a href="calculate.php">Calculate</a></h3>
+	<h3 class="nav">Genability API PHP Library :: Examples :: <a href="tariff.php">Tariff</a> | <a href="tariffs.php">Tariffs</a> | <a href="price.php">Price</a> | <a href="calculate.php">Calculate</a> | <a href="accountManager.php">Accounts</a></h3>
 	<h2>Calculate Example</h2>
 	<form id="tariffInputs" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
 		<div class="inputBlock">
@@ -114,7 +109,7 @@ $c = json_decode($output, true);
 		</div>
 <?if (sizeof($accounts->results)>0 && (!$_POST || $_POST['accountId'] != '')) {?>
 		<div class="inputBlock">
-			<label for="accountId">Account Id(Optional)</label>
+			<label for="accountId">Account Id (Optional)</label>
 			<? if ($ACCOUNT_ID) {
 			echo $ACCOUNT_ID; ?>
 			<input type="hidden" name="accountId" value="<?=$ACCOUNT_ID;?>"/>
@@ -129,6 +124,17 @@ $c = json_decode($output, true);
 		</div>
 <?} else {?>
 		<input type="hidden" name="accountId" value=""/>
+<?}?>
+<?if (sizeof($accounts->results)>0 && (!$_POST || $_POST['providerAccountId'] != '')) {?>
+		<div class="inputBlock">
+			<label for="providerAccountId">Provider Account Id (Optional)</label>
+			<? if ($PROVIDER_ACCOUNT_ID) {
+			echo $PROVIDER_ACCOUNT_ID; ?>
+			<input type="hidden" name="providerAccountId" value="<?=$PROVIDER_ACCOUNT_ID;?>"/>
+			<? } else { ?>
+			<input type="text" name="providerAccountId" id="providerAccountId"/>
+			<? } ?>
+		</div>
 <?}?>
 		<? if ($TERRITORY_ID) { ?>
 		<div class="inputBlock">
@@ -158,15 +164,6 @@ $c = json_decode($output, true);
 		</div>
 		<? }
 		if ($c['status'] == "success" && $c['type'] == "Tariff") { ?>
-			<div class="inputBlock">
-				<label for="timezone">Timezone</label>
-				<select name="timezone">
-					<option value="-0700">Pacific</option>
-					<option value="-0600">Mountain</option>
-					<option value="-0500">Central</option>
-					<option value="-0400">Eastern</option>
-				</select>
-			</div>
 			<div class="inputBlock">
 				<label for="fromDateTime">From Date</label>
 				<? if ($FROM_DATE_TIME) {

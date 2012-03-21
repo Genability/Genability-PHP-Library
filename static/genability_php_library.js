@@ -20,7 +20,6 @@ function setTariff(input) {
 /** calculate.php **/
 var dayStrings = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 var monthStrings = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-var selectedTimezone = '-0700';
 var tariffInputsArrayOffset = 0;
 var metadataInputsHTML = '';
 var metadataInputs2HTML = '';
@@ -37,19 +36,8 @@ $(function (){
 	$("#generatedInputs").html("");
 	$("#metadataInputs2").html("");
 
-	// get selected timezone
-	if ($("input[name=timezone]").is('*')) {
-		selectedTimezone = $("input[name=timezone]").val();
-	}
-
-	$("input[name=fromDateTime]").datepicker({dateFormat: "yy-mm-dd'T00:00:00.0Z'"});
-	$("input[name=toDateTime]").datepicker({dateFormat: "yy-mm-dd'T00:00:00.0Z'"});
-
-	/*$("select[name=timezone],input[name=fromDateTime],input[name=toDateTime]").change(function() {
-		$("input[name=fromDateTime]").val($("input[name=fromDateTime]").val().substring(0,21) + $("select[name=timezone]").val());
-		$("input[name=toDateTime]").val($("input[name=toDateTime]").val().substring(0,21) + $("select[name=timezone]").val());
-		selectedTimezone = $("select[name=timezone]").val();
-	});*/
+	$("input[name=fromDateTime]").datepicker({dateFormat: "yy-mm-dd"});
+	$("input[name=toDateTime]").datepicker({dateFormat: "yy-mm-dd"});
 	
 	$("a[href=#fillAll]").click(function(e) {
 		e.preventDefault();
@@ -150,7 +138,7 @@ function generateTariffInputs(startDate, endDate, breakdown) {
 		case "months":
 			var nextMonthjs = new Date(startDatejs);
 			nextMonthjs.setMonth(startDatejs.getMonth()+1);
-			var nextMonth = nextMonthjs.getFullYear() + "-" + padDate(nextMonthjs.getMonth()+1) + "-" + padDate(nextMonthjs.getDate()) + "T00:00:00.0" + selectedTimezone;
+			var nextMonth = nextMonthjs.getFullYear() + "-" + padDate(nextMonthjs.getMonth()+1) + "-" + padDate(nextMonthjs.getDate()) + "T00:00:00.0";
 			var lastMonth;
 			if (endDatejs > nextMonthjs) {
 			while (endDatejs > nextMonthjs) {
@@ -162,7 +150,7 @@ function generateTariffInputs(startDate, endDate, breakdown) {
 				lastMonth = nextMonth;
 				lastMonthjs = new Date(nextMonthjs);
 				nextMonthjs.setMonth(nextMonthjs.getMonth()+1);
-				nextMonth = nextMonthjs.getFullYear() + "-" + padDate(nextMonthjs.getMonth()+1) + "-" + padDate(nextMonthjs.getDate()) + "T00:00:00.0" + selectedTimezone;
+				nextMonth = nextMonthjs.getFullYear() + "-" + padDate(nextMonthjs.getMonth()+1) + "-" + padDate(nextMonthjs.getDate()) + "T00:00:00.0";
 				i++;
 			}
 			appendTariffInput(i, lastMonth, endDate, "Consumption for " + monthStrings[lastMonthjs.getMonth()] + " " + lastMonthjs.getFullYear());
@@ -173,7 +161,7 @@ function generateTariffInputs(startDate, endDate, breakdown) {
 		case "days":
 			var nextDayjs = new Date(startDatejs);
 			nextDayjs.setDate(nextDayjs.getDate()+1);
-			var nextDay = nextDayjs.getFullYear() + '-' + padDate(nextDayjs.getMonth()+1) + '-' + padDate(nextDayjs.getDate()) + "T00:00:00.0" + selectedTimezone;
+			var nextDay = nextDayjs.getFullYear() + '-' + padDate(nextDayjs.getMonth()+1) + '-' + padDate(nextDayjs.getDate()) + "T00:00:00.0";
 			var lastDay;
 			if (endDatejs > nextDayjs) {
 			while (endDatejs > nextDayjs) {
@@ -185,7 +173,7 @@ function generateTariffInputs(startDate, endDate, breakdown) {
 				lastDay = nextDay;
 				lastDayjs = new Date(nextDayjs);
 				nextDayjs.setDate(nextDayjs.getDate()+1);
-				nextDay = nextDayjs.getFullYear() + '-' + padDate(nextDayjs.getMonth()+1) + '-' + padDate(nextDayjs.getDate()) + "T00:00:00.0" + selectedTimezone;
+				nextDay = nextDayjs.getFullYear() + '-' + padDate(nextDayjs.getMonth()+1) + '-' + padDate(nextDayjs.getDate()) + "T00:00:00.0";
 				i++;
 			}
 			appendTariffInput(i, lastDay, endDate, dayStrings[lastDayjs.getDay()] + ", " + monthStrings[lastDayjs.getMonth()] + " " + lastDayjs.getDate() + " " + lastDayjs.getFullYear());
@@ -201,7 +189,7 @@ function generateTariffInputs(startDate, endDate, breakdown) {
 			var h = 0;
 			var nextDayjs = new Date(startDatejs);
 			nextDayjs.setDate(nextDayjs.getDate()+1);
-			var nextDay = nextDayjs.getFullYear() + '-' + padDate(nextDayjs.getMonth()+1) + '-' + padDate(nextDayjs.getDate()) + "T00:00:00.0" + selectedTimezone;
+			var nextDay = nextDayjs.getFullYear() + '-' + padDate(nextDayjs.getMonth()+1) + '-' + padDate(nextDayjs.getDate()) + "T00:00:00.0";
 			var lastDay;
 			//if (endDatejs > nextDayjs) {
 			while (endDatejs >= nextDayjs) {
@@ -232,7 +220,7 @@ function generateTariffInputs(startDate, endDate, breakdown) {
 				}
 				nextDayjs.setDate(nextDayjs.getDate()+1);
 				lastDay = nextDay;
-				nextDay = nextDayjs.getFullYear() + '-' + padDate(nextDayjs.getMonth()+1) + '-' + padDate(nextDayjs.getDate()) + "T00:00:00.0" + selectedTimezone;
+				nextDay = nextDayjs.getFullYear() + '-' + padDate(nextDayjs.getMonth()+1) + '-' + padDate(nextDayjs.getDate()) + "T00:00:00.0";
 				i++;
 			}
 			for ($j=0; $j<=endDate.substr(11,2); $j++) {

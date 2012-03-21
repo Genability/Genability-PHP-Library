@@ -81,6 +81,9 @@ class genability {
 		if ($params['accountId']) {
 			$url .= "&accountId=" . $params['accountId'];
 		}
+		if ($params['providerAccountId']) {
+			$url .= "&providerAccountId=" . $params['providerAccountId'];
+		}
 
 		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
 
@@ -190,7 +193,7 @@ class genability {
 		$url = $this->GENABILITY_API_URL_BETA . "calculate/" . $params['tariffId'] . $this->API_PARAMS;
 
 		foreach ($params as $k => $v) {
-			if ($v)
+			if ($v && $k != 'tariffId')
 				$url .= "&" . rawurlencode($k) . "=" . rawurlencode($v);
 		}
 
@@ -233,6 +236,10 @@ class genability {
 		}
 		$data['detailLevel'] = $params['detailLevel'];
 		$data['tariffInputs'] = $params['tariffInputs'];
+		if ($params['providerAccountId']) {
+			$data['tariffInputs'][0]['keyName'] = 'providerAccountId';
+			$data['tariffInputs'][0]['dataValue'] = $params['providerAccountId'];
+		}
 		if ($params['accountId']) {
 			$data['tariffInputs'][0]['keyName'] = 'accountId';
 			$data['tariffInputs'][0]['dataValue'] = $params['accountId'];
@@ -377,7 +384,7 @@ class genability {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
 		curl_setopt($ch,CURLOPT_POST,true);
-		curl_setopt ($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8'));
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8'));
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
 		$result = curl_exec($ch);
 		$info = curl_getinfo($ch);
@@ -392,6 +399,12 @@ class genability {
 	function updateAccount($params) {
 		$url = $this->GENABILITY_API_URL_BETA . "accounts/" . $this->API_PARAMS;
 
+		foreach($params as $key=>$value) {
+			if ($key != "accountId" && $key != "accountName" && $key != "customerOrgName" && $key != "customerOrgId" && $key != "providerAccountId") unset($params[$key]);
+			elseif ($value == "" || $value == NULL) unset($params[$key]);
+		}
+		$params = json_encode($params);
+
 		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
 		if ($this->config['debug']) { echo '<strong class="debugFunction">Params:</strong>'; print_r($params); }
 
@@ -400,6 +413,7 @@ class genability {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8'));
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
 		$result = curl_exec($ch);
 		$info = curl_getinfo($ch);
