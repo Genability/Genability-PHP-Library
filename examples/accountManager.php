@@ -1,17 +1,37 @@
 <?
+
+if ($_POST['action'] == 'getAccount') {
+	$url = $_SERVER['PHP_SELF'];
+	if ($_POST['accountId'] && $_POST['providerAccountId']) {
+		$url .= '?accountId=' . $_POST['accountId'];
+		$url .- '&providerAccountId=' . $_POST['providerAccountId'];
+		header('Location: ' . $url);
+	} elseif ($_POST['accountId']) {
+		$url .= '?accountId=' . $_POST['accountId'];
+		header('Location: ' . $url);
+	} elseif ($_POST['providerAccountId']) {
+		$url .= '?providerAccountId=' . $_POST['providerAccountId'];
+		header('Location: ' . $url);
+	}
+	//echo("<script> top.location.href='" . $url . "'</script>");
+	//header('Location: ' . $url);
+}
 /** include the Genability PHP Library */
 require_once('../genability.php');
 
+$appId = 'your-app-id-here';	// Your Unique Genability Application ID <https://developer.genability.com/admin/applications>
+$appKey = 'your-app-key-here';	// Your Unique Genability Application Key <https://developer.genability.com/admin/applications>
+
 // set your app id and app key
 $gen = new genability(array(
-  'app_id'  => 'your-app-id-here',    // Your Unique Genability Application ID <https://developer.genability.com/admin/applications>
-  'app_key' => 'your-app-key-here',   // Your Unique Genability Application Key <https://developer.genability.com/admin/applications>
-  'debug'   => false,                // Debug mode echos API Url & POST data if set to true (Optional)
+  'app_id'  => $appId,
+  'app_key' => $appKey,
+  'debug'   => false, // Debug mode echos API Url & POST data if set to true (Optional)
 ));
 
+print_r($_POST);
+
 if ($_POST) {
-	//$addAccount - $gen->addAccount($_POST);
-	//print_r($_POST);
 	switch ($_POST["action"]) {
 		case "addAccount":
 			$gen->addAccount($_POST);
@@ -22,26 +42,11 @@ if ($_POST) {
 		case "deleteAccount":
 			$gen->deleteAcount($_POST["accountId"]);
 			break;
-		case "getAccount":
-			$url = $_SERVER['PHP_SELF'];
-			if ($_POST['accountId'] && $_POST['providerAccountId']) {
-				$url .= '?accountId=' . $_POST['accountId'];
-				$url .- '&providerAccountId=' . $_POST['providerAccountId'];
-			} elseif ($_POST['accountId']) {
-				$url .= '?accountId=' . $_POST['accountId'];
-			} elseif ($_POST['providerAccountId']) {
-				$url .= '?providerAccountId=' . $_POST['providerAccountId'];
-			}
-			echo("<script> top.location.href='" . $url . "'</script>");
-			break;
 		case "addProfile":
 			$gen->addProfile($_POST);
 			break;
 		case "getProfile":
 			$gen->getProfile($_POST);
-			break;
-		case "uploadReadings":
-			$gen->uploadReadings($_POST);
 			break;
 	}
 }
@@ -66,8 +71,13 @@ if ($_GET["accountId"] && $_GET['providerAccountId']) {
 	$profiles = json_decode($profiles, true);
 } elseif ($_GET["profileId"]) {
 	$profile = $gen->getProfile($_GET);
-print_r($profile);
 	$profile = json_decode($profile, true);
+} else if ($_POST['search']) {
+	$accounts = $gen->getAccounts(array('search' => $_POST['search']));
+	$accounts = json_decode($accounts, true);
+
+	$profiles = $gen->getProfiles();
+	$profiles = json_decode($profiles, true);
 } else {
 	$accounts = $gen->getAccounts();
 	$accounts = json_decode($accounts, true);
@@ -91,7 +101,7 @@ print_r($profile);
 <div id="genabilityExample">
 	<div id="powered_by_genability">
 		<h1 id="genability"><a href="http://genability.com/" target="_blank">Powered by Genability</a></h1>
-		<p><a href="https://developer.genability.com/documentation/api-reference/storage/account" target="_blank">Account Documentation</a></p>
+		<p><a href="http://developer.genability.com/documentation/api-reference/account-api/" target="_blank">Account Documentation</a></p>
 	</div>
 	<h3 class="nav">Genability API PHP Library :: Examples :: <a href="tariff.php">Tariff</a> | <a href="tariffs.php">Tariffs</a> | <a href="price.php">Price</a> | <a href="calculate.php">Calculate</a> | <a href="accountManager.php">Accounts</a></h3>
 	<h2>Account Manager</h2>
@@ -131,7 +141,7 @@ if ($accounts["status"] == "success") { ?>
 </div>
 <div class="inputBlock">
 	<label for="accountName">accountName</label>
-	<input name="accountName" id="accountName"/>
+	<input name="search" id="accountName"/>
 </div>
 <div class="inputBlock">
 	<label for="providerAccountId">providerAccountId</label>
@@ -287,24 +297,19 @@ echo '<form name="deleteAccount" action="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QU
 		}
 	} ?>
 
-<form action="<?=$_SERVER['PHP_SELF']?>?<?=$_SERVER['QUERY_STRING']?>" method="POST" enctype="multipart/form-data">
-<fieldset>
-	<legend>Upload Reading Data</legend>
-	<input type="hidden" name="action" value="uploadReadings"/>
-	<input type="hidden" name="profileId" value="<?=$profile["profileId"]?>"/>
-	<input type="hidden" name="fileFormat" value="espi"/>
-<div class="inputBlock">
-	<label for="fileData">file</label>
-	<input type="file" name="fileData" id="fileData"/>
-</div>
-<div class="inputBlock">
+<form action="http://api.genability.com/rest/beta/loader/account/up.html?appId=<?=$appId?>&appKey=<?=$appKey?>" method="post" enctype="multipart/form-data">
+	<input type="file" name="fileData" />
+	<?$pageURL = (@$_SERVER["HTTPS"] == "on") ? "https://" : "http://";
+	$pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+	?>
+	<input type="hidden" name="redirectPath" value="<?=$pageURL?>" />
+	<input type="hidden" name="accountId" value="<?=$profile["accountId"]?>" />
+	<input type="hidden" name="profileId" value="<?=$profile["profileId"]?>" />
 	<input type="submit" value="Upload"/>
-</div>
-</fieldset>
 </form>
 
 <? } else { ?>
-Please connect your appId to Genability's Explorer.
+Please connect your appId to Genability's Explorer.<br/>
 <?}?>
 
 <? if ($profiles["status"] == "success") {

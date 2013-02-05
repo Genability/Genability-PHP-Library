@@ -39,7 +39,7 @@ if ($_POST) {
 <div id="genabilityExample">
 	<div id="powered_by_genability">
 		<h1 id="genability"><a href="http://genability.com/" target="_blank">Powered by Genability</a></h1>
-		<p><a href="https://developer.genability.com/documentation/api-reference/public/tariff#getTariffs" target="_blank">Get Tariffs Documentation</a></p>
+		<p><a href="http://developer.genability.com/documentation/api-reference/tariff-api/tariff/#getTariffs" target="_blank">Get Tariffs Documentation</a></p>
 	</div>
 	<h3 class="nav">Genability API PHP Library :: Examples :: <a href="tariff.php">Tariff</a> | <a href="tariffs.php">Tariffs</a> | <a href="price.php">Price</a> | <a href="calculate.php">Calculate</a> | <a href="accountManager.php">Accounts</a></h3>
 	<h2>Get Tariffs Example</h2>

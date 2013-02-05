@@ -88,9 +88,9 @@ class genability {
 		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
 
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 		$result = curl_exec($ch);
 		$info = curl_getinfo($ch);
 		curl_close($ch);
@@ -128,9 +128,9 @@ class genability {
 		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }	
 
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 		$result = curl_exec($ch);
 		$info = curl_getinfo($ch);
 		curl_close($ch);
@@ -170,9 +170,9 @@ class genability {
 		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
 
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 		$result = curl_exec($ch);
 		$info = curl_getinfo($ch);
 		curl_close($ch);
@@ -200,9 +200,9 @@ class genability {
 		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
 
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 		$result = curl_exec($ch);
 		$info = curl_getinfo($ch);
 		curl_close($ch);
@@ -277,9 +277,9 @@ class genability {
 		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
 
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 		$result = curl_exec($ch);
 		$info = curl_getinfo($ch);
 		curl_close($ch);
@@ -307,9 +307,9 @@ class genability {
 		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
 
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 		$result = curl_exec($ch);
 		$info = curl_getinfo($ch);
 		curl_close($ch);
@@ -325,7 +325,7 @@ class genability {
 
 		// optional parameters
 		if ($params['search']) {
-			$url .= "&search=" . $params['toDateTime'];
+			$url .= "&search=" . $params['search'];
 		}
 
 		if ($params['providerAccountId']) {
@@ -335,9 +335,9 @@ class genability {
 		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
 
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 		$result = curl_exec($ch);
 		$info = curl_getinfo($ch);
 		curl_close($ch);
@@ -354,9 +354,9 @@ class genability {
 		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
 
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
 		$result = curl_exec($ch);
 		$info = curl_getinfo($ch);
@@ -380,10 +380,10 @@ class genability {
 		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
 
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
-		curl_setopt($ch,CURLOPT_POST,true);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+		curl_setopt($ch, CURLOPT_POST, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8'));
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
 		$result = curl_exec($ch);
@@ -409,9 +409,9 @@ class genability {
 		if ($this->config['debug']) { echo '<strong class="debugFunction">Params:</strong>'; print_r($params); }
 
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8'));
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
@@ -431,9 +431,9 @@ class genability {
 		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
 
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
 		$result = curl_exec($ch);
@@ -452,9 +452,9 @@ class genability {
 		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
 
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
 		$result = curl_exec($ch);
@@ -473,9 +473,9 @@ class genability {
 		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
 
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
 		$result = curl_exec($ch);
 		$info = curl_getinfo($ch);
@@ -500,11 +500,11 @@ class genability {
 		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
 
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
-		curl_setopt($ch,CURLOPT_POST,true);
-		curl_setopt ($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8'));
+		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+		curl_setopt($ch,CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8'));
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
 		$result = curl_exec($ch);
 		$info = curl_getinfo($ch);
@@ -524,9 +524,9 @@ class genability {
 		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
 
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch , CURLOPT_TIMEOUT, 30);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 		$result = curl_exec($ch);
 		$info = curl_getinfo($ch);
 		curl_close($ch);
@@ -557,7 +557,7 @@ class genability {
 		if ($this->config['debug']) { echo '<strong class="debugFunction">' . __FUNCTION__ . '</strong>' . $url; }
 
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 		$result = curl_exec($ch);
